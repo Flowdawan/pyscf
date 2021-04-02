@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>4.11. Time-dependent Hartree-Fock and Density Functional Theory &mdash; PySCF 1.7.6 documentation</title>
+  <title>4.12. Time-dependent Hartree-Fock and Density Functional Theory &mdash; PySCF 2.0.0 documentation</title>
   
 
   
@@ -39,8 +39,8 @@
     
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="4.12. Solvation models" href="solvent.html" />
-    <link rel="prev" title="4.10. Multi-configuration self-consistent field (MCSCF)" href="mcscf.html" /> 
+    <link rel="next" title="4.13. Solvation models" href="solvent.html" />
+    <link rel="prev" title="4.11. Multi-Reference Perturbation Theory (MRPT)" href="mrpt.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -64,7 +64,7 @@
             
             
               <div class="version">
-                1.7
+                2.0
               </div>
             
           
@@ -104,23 +104,23 @@
 <li class="toctree-l2"><a class="reference internal" href="adc.html">4.8. Algebraic diagrammatic construction (ADC) scheme</a></li>
 <li class="toctree-l2"><a class="reference internal" href="agf2.html">4.9. Auxiliary second-order Green’s function perturbation theory (AGF2)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="mcscf.html">4.10. Multi-configuration self-consistent field (MCSCF)</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">4.11. Time-dependent Hartree-Fock and Density Functional Theory</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#introduction">4.11.1. Introduction</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#theory">4.11.2. Theory</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#methods">4.11.3. Methods</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#property-calculation">4.11.4. Property calculation</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#oscillator-strengths">4.11.4.1. Oscillator strengths</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#transition-moments">4.11.4.2. Transition moments</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#nuclear-gradients">4.11.4.3. Nuclear gradients</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#natural-transition-orbital-analysis">4.11.4.4. Natural transition orbital analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mrpt.html">4.11. Multi-Reference Perturbation Theory (MRPT)</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">4.12. Time-dependent Hartree-Fock and Density Functional Theory</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#introduction">4.12.1. Introduction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#theory">4.12.2. Theory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#methods">4.12.3. Methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#property-calculation">4.12.4. Property calculation</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#oscillator-strengths">4.12.4.1. Oscillator strengths</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#transition-moments">4.12.4.2. Transition moments</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#nuclear-gradients">4.12.4.3. Nuclear gradients</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#natural-transition-orbital-analysis">4.12.4.4. Natural transition orbital analysis</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="#references">4.11.5. References</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#references">4.12.5. References</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="solvent.html">4.12. Solvation models</a></li>
-<li class="toctree-l2"><a class="reference internal" href="qmmm.html">4.13. QM/MM methods</a></li>
-<li class="toctree-l2"><a class="reference internal" href="x2c.html">4.14. Relativistic calculations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="solvent.html">4.13. Solvation models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="qmmm.html">4.14. QM/MM methods</a></li>
 <li class="toctree-l2"><a class="reference internal" href="df.html">4.15. Density fitting (DF)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pbc.html">4.16. Periodic boundary conditions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="eph.html">4.17. Electron Phonon Matrix</a></li>
@@ -182,7 +182,7 @@
         
           <li><a href="../user.html"><span class="section-number">4. </span>User guide</a> &raquo;</li>
         
-      <li><span class="section-number">4.11. </span>Time-dependent Hartree-Fock and Density Functional Theory</li>
+      <li><span class="section-number">4.12. </span>Time-dependent Hartree-Fock and Density Functional Theory</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -202,10 +202,10 @@
            <div itemprop="articleBody">
             
   <div class="section" id="time-dependent-hartree-fock-and-density-functional-theory">
-<span id="theory-tdscf"></span><h1><span class="section-number">4.11. </span>Time-dependent Hartree-Fock and Density Functional Theory<a class="headerlink" href="#time-dependent-hartree-fock-and-density-functional-theory" title="Permalink to this headline">¶</a></h1>
+<span id="theory-tdscf"></span><h1><span class="section-number">4.12. </span>Time-dependent Hartree-Fock and Density Functional Theory<a class="headerlink" href="#time-dependent-hartree-fock-and-density-functional-theory" title="Permalink to this headline">¶</a></h1>
 <p><em>Modules</em>: <a class="reference internal" href="../modules/tdscf.html#module-tdscf" title="tdscf: time-dependent Hartree-Fock and density functional theory"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tdscf</span></code></a>, <a class="reference internal" href="../modules/pbc/tdscf.html#module-pbc.tdscf" title="pbc.tdscf: TDHF and TDDFT with periodic boundary conditions"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pbc.tdscf</span></code></a></p>
 <div class="section" id="introduction">
-<h2><span class="section-number">4.11.1. </span>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">4.12.1. </span>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
 <p>PySCF implements the time-dependent Hartree-Fock (TDHF) and
 time-dependent density functional theory (TDDFT) (frequency domain)
 linear response theories to compute excited-state energies
@@ -234,7 +234,7 @@ A minimal example that runs a TDDFT calculation is as follows</p>
 and transition dipole moments of the ten lowest singlet exicted states.</p>
 </div>
 <div class="section" id="theory">
-<h2><span class="section-number">4.11.2. </span>Theory<a class="headerlink" href="#theory" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">4.12.2. </span>Theory<a class="headerlink" href="#theory" title="Permalink to this headline">¶</a></h2>
 <p>Using first-order time-dependent perturbation theory within HF or KS theory,
 one obtains the non-Hermitian TDHF or TDDFT equations for the excitation energies
 <a class="bibtex reference internal" href="#drehea2005" id="id1">[1]</a>:</p>
@@ -266,7 +266,7 @@ Hermitian eigenvalue problem</p>
 \[\mathbf{AX} = \omega\mathbf{X} \;.\]</div>
 </div>
 <div class="section" id="methods">
-<h2><span class="section-number">4.11.3. </span>Methods<a class="headerlink" href="#methods" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">4.12.3. </span>Methods<a class="headerlink" href="#methods" title="Permalink to this headline">¶</a></h2>
 <p>For TDHF or TDDFT calculations,
 the reference state can be either restricted or unrestricted:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mytd</span> <span class="o">=</span> <span class="n">mol</span><span class="o">.</span><span class="n">RKS</span><span class="p">()</span><span class="o">.</span><span class="n">run</span><span class="p">()</span><span class="o">.</span><span class="n">TDDFT</span><span class="p">()</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
@@ -287,9 +287,9 @@ which also computes the oscillator strengths and dipole moments:</p>
 </div>
 </div>
 <div class="section" id="property-calculation">
-<h2><span class="section-number">4.11.4. </span>Property calculation<a class="headerlink" href="#property-calculation" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">4.12.4. </span>Property calculation<a class="headerlink" href="#property-calculation" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="oscillator-strengths">
-<h3><span class="section-number">4.11.4.1. </span>Oscillator strengths<a class="headerlink" href="#oscillator-strengths" title="Permalink to this headline">¶</a></h3>
+<h3><span class="section-number">4.12.4.1. </span>Oscillator strengths<a class="headerlink" href="#oscillator-strengths" title="Permalink to this headline">¶</a></h3>
 <p>Oscillator strengths for each excited state can be computed in
 both length and velocity gauges:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mytd</span><span class="o">.</span><span class="n">oscillator_strength</span><span class="p">(</span><span class="n">gauge</span><span class="o">=</span><span class="s1">&#39;length&#39;</span><span class="p">)</span>
@@ -306,7 +306,7 @@ to the oscillator strength can also be included:</p>
 </div>
 </div>
 <div class="section" id="transition-moments">
-<h3><span class="section-number">4.11.4.2. </span>Transition moments<a class="headerlink" href="#transition-moments" title="Permalink to this headline">¶</a></h3>
+<h3><span class="section-number">4.12.4.2. </span>Transition moments<a class="headerlink" href="#transition-moments" title="Permalink to this headline">¶</a></h3>
 <p>PySCF implements various types of transition moments between the reference SCF state and
 the TDHF or TDDFT excited states. These include:</p>
 <ul>
@@ -329,7 +329,7 @@ the TDHF or TDDFT excited states. These include:</p>
 </ul>
 </div>
 <div class="section" id="nuclear-gradients">
-<h3><span class="section-number">4.11.4.3. </span>Nuclear gradients<a class="headerlink" href="#nuclear-gradients" title="Permalink to this headline">¶</a></h3>
+<h3><span class="section-number">4.12.4.3. </span>Nuclear gradients<a class="headerlink" href="#nuclear-gradients" title="Permalink to this headline">¶</a></h3>
 <p>Analytic nuclear gradients are available for TDHF and TDDFT,
 and they can be computed as follows:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">tdg</span> <span class="o">=</span> <span class="n">mytd</span><span class="o">.</span><span class="n">Gradients</span><span class="p">()</span>
@@ -340,7 +340,7 @@ and they can be computed as follows:</p>
 </div>
 </div>
 <div class="section" id="natural-transition-orbital-analysis">
-<h3><span class="section-number">4.11.4.4. </span>Natural transition orbital analysis<a class="headerlink" href="#natural-transition-orbital-analysis" title="Permalink to this headline">¶</a></h3>
+<h3><span class="section-number">4.12.4.4. </span>Natural transition orbital analysis<a class="headerlink" href="#natural-transition-orbital-analysis" title="Permalink to this headline">¶</a></h3>
 <p>Natural transition orbitals (NTOs) can be computed by
 singular value decomposition of the transition density matrix.
 In PySCF, these orbitals can be obtained as follows:</p>
@@ -352,7 +352,7 @@ and they are ordered as occupied orbitals followed by virtual orbitals.</p>
 </div>
 </div>
 <div class="section" id="references">
-<h2><span class="section-number">4.11.5. </span>References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">4.12.5. </span>References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h2>
 <p id="bibtex-bibliography-user/tddft-0"><dl class="citation">
 <dt class="bibtex label" id="drehea2005"><span class="brackets"><a class="fn-backref" href="#id1">1</a></span></dt>
 <dd><p>Andreas Dreuw and Martin Head-Gordon. Single-reference ab initio methods for the calculation of excited states of large molecules. <em>Chemical reviews</em>, 105(11):4009–4037, 2005.</p>
@@ -374,8 +374,8 @@ and they are ordered as occupied orbitals followed by virtual orbitals.</p>
           </div>
           <footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="solvent.html" class="btn btn-neutral float-right" title="4.12. Solvation models" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
-        <a href="mcscf.html" class="btn btn-neutral float-left" title="4.10. Multi-configuration self-consistent field (MCSCF)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="solvent.html" class="btn btn-neutral float-right" title="4.13. Solvation models" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="mrpt.html" class="btn btn-neutral float-left" title="4.11. Multi-Reference Perturbation Theory (MRPT)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 
   <hr/>

@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>6.17. lo — Orbital localization and analysis tools &mdash; PySCF 1.7.6 documentation</title>
+  <title>6.17. lo — Orbital localization and analysis tools &mdash; PySCF 2.0.0 documentation</title>
   
 
   
@@ -63,7 +63,7 @@
             
             
               <div class="version">
-                1.7
+                2.0
               </div>
             
           
@@ -119,6 +119,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#module-pyscf.lo.nao">6.17.5. Natural atomic orbitals</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#module-pyscf.lo.iao">6.17.6. Intrinsic Atomic Orbitals</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#module-pyscf.lo.ibo">6.17.7. Intrinsic Bond Orbitals</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cholesky-orbitals">6.17.8. Cholesky orbitals</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="mcscf.html">6.18. <code class="xref py py-mod docutils literal notranslate"><span class="pre">mcscf</span></code> — Multi-configurational self-consistent field</a></li>
@@ -243,6 +244,7 @@ of the original atomic orbitals):</p>
 <li><p><a class="reference external" href="https://github.com/pyscf/pyscf/tree/master/examples/local_orb/05-ibo_periodic_diamond_cubegen.py">examples/local_orb/05-ibo_periodic_diamond_cubegen.py</a></p></li>
 <li><p><a class="reference external" href="https://github.com/pyscf/pyscf/tree/master/examples/local_orb/06-vvo_livvo_water_cubegen.py">examples/local_orb/06-vvo_livvo_water_cubegen.py</a></p></li>
 <li><p><a class="reference external" href="https://github.com/pyscf/pyscf/tree/master/examples/local_orb/07-pipek_mezey.py">examples/local_orb/07-pipek_mezey.py</a></p></li>
+<li><p><a class="reference external" href="https://github.com/pyscf/pyscf/tree/master/examples/local_orb/08-cholesky.py">examples/local_orb/08-cholesky.py</a></p></li>
 <li><p><a class="reference external" href="https://github.com/pyscf/pyscf/tree/master/examples/local_orb/10-modify_valence_space_for_meta_lowdin.py">examples/local_orb/10-modify_valence_space_for_meta_lowdin.py</a></p></li>
 <li><p><a class="reference external" href="https://github.com/pyscf/pyscf/tree/master/examples/local_orb/40-hubbard_model_PM_localization.py">examples/local_orb/40-hubbard_model_PM_localization.py</a></p></li>
 <li><p><a class="reference external" href="https://github.com/pyscf/pyscf/tree/master/examples/local_orb/nlocal.py">examples/local_orb/nlocal.py</a></p></li>
@@ -795,6 +797,9 @@ module was used to maximize the IAO Mulliken charges.</p>
 <dd><p>Help function to define core and valence shells for shell with different l</p>
 </dd></dl>
 
+</div>
+<div class="section" id="cholesky-orbitals">
+<h2><span class="section-number">6.17.8. </span>Cholesky orbitals<a class="headerlink" href="#cholesky-orbitals" title="Permalink to this headline">¶</a></h2>
 </div>
 </div>
 

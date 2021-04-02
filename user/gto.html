@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>4.1. Molecular structure &mdash; PySCF 1.7.6 documentation</title>
+  <title>4.1. Molecular structure &mdash; PySCF 2.0.0 documentation</title>
   
 
   
@@ -64,7 +64,7 @@
             
             
               <div class="version">
-                1.7
+                2.0
               </div>
             
           
@@ -116,10 +116,10 @@
 <li class="toctree-l2"><a class="reference internal" href="adc.html">4.8. Algebraic diagrammatic construction (ADC) scheme</a></li>
 <li class="toctree-l2"><a class="reference internal" href="agf2.html">4.9. Auxiliary second-order Green’s function perturbation theory (AGF2)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="mcscf.html">4.10. Multi-configuration self-consistent field (MCSCF)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tddft.html">4.11. Time-dependent Hartree-Fock and Density Functional Theory</a></li>
-<li class="toctree-l2"><a class="reference internal" href="solvent.html">4.12. Solvation models</a></li>
-<li class="toctree-l2"><a class="reference internal" href="qmmm.html">4.13. QM/MM methods</a></li>
-<li class="toctree-l2"><a class="reference internal" href="x2c.html">4.14. Relativistic calculations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mrpt.html">4.11. Multi-Reference Perturbation Theory (MRPT)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tddft.html">4.12. Time-dependent Hartree-Fock and Density Functional Theory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="solvent.html">4.13. Solvation models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="qmmm.html">4.14. QM/MM methods</a></li>
 <li class="toctree-l2"><a class="reference internal" href="df.html">4.15. Density fitting (DF)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pbc.html">4.16. Periodic boundary conditions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="eph.html">4.17. Electron Phonon Matrix</a></li>
@@ -321,7 +321,7 @@ format:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mol</span><span class="o">.</span><span class="n">atom</span> <span class="o">=</span> <span class="p">((</span><span class="s1">&#39;O&#39;</span><span class="p">,</span><span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">3</span><span class="p">)),</span> <span class="p">[</span><span class="s1">&#39;H&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="s1">&#39;H&#39;</span><span class="p">,[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]])</span>
 </pre></div>
 </div>
-<p>No matter which format or symbols were used in the input, <code class="xref py py-func docutils literal notranslate"><span class="pre">Mole.build()</span></code>
+<p>No matter which format or symbols are used in the input, <code class="xref py py-func docutils literal notranslate"><span class="pre">Mole.build()</span></code>
 will convert <code class="xref py py-attr docutils literal notranslate"><span class="pre">Mole.atom</span></code> to the internal format:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mol</span><span class="o">.</span><span class="n">atom</span> <span class="o">=</span> <span class="s1">&#39;&#39;&#39;</span>
 <span class="go">    O        0,   0, 0             ; 1 0.0 1 0</span>
@@ -344,7 +344,7 @@ This function returns a (N,3) array for the coordinates of each atom:</p>
 <span class="go"> [0. 0. 1.]]</span>
 </pre></div>
 </div>
-<p id="basis-sets">Ghost atoms can also be specified when inputing the geometry.
+<p id="basis-sets">Ghost atoms can also be specified when inputting the geometry.
 See <a class="reference external" href="https://github.com/pyscf/pyscf/tree/master/examples/gto/03-ghost_atom.py">examples/gto/03-ghost_atom.py</a> for examples.</p>
 </div>
 <div class="section" id="basis-set">
@@ -390,7 +390,7 @@ internal format (see <a class="reference internal" href="../modules/gto.html#gto
 </div>
 <p>More examples of ghost atoms can be found in
 <a class="reference external" href="https://github.com/pyscf/pyscf/tree/master/examples/gto/03-ghost_atom.py">examples/gto/03-ghost_atom.py</a>.</p>
-<p>Like the requirements of geometry input, you can use atomic symbols
+<p>Like the requirements for geometry input, you can use atomic symbols
 (case-insensitive) or atomic nuclear charges as the keyword of the
 <code class="xref py py-attr docutils literal notranslate"><span class="pre">basis</span></code> dictionary. Prefix and suffix of numbers and special
 characters are allowed. If the decorated atomic symbol is appeared in
@@ -514,10 +514,10 @@ PySCF provides the following SO-ECPs</p>
 </table>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Be careful with the SO-ECP conventions when inputing them directly in the
+<p>Be careful with the SO-ECP conventions when inputting them directly in the
 input script. SO-ECP parameters may take different conventions in different
 packages. More particularly, the treatment of the factor 2/(2l+1).  PySCF
-assumes that this factor was multiplied in the SOC parameters. See also
+assumes that this factor has been multiplied into the SOC parameters. See also
 relevant discussions in <a class="reference external" href="http://www.diracprogram.org/doc/master/molecule_and_basis/molecule_with_ecp.html">Dirac doc</a>
 and <a class="reference external" href="https://nwchemgit.github.io/ECP.html">NWChem doc</a>.</p>
 </div>
@@ -542,7 +542,7 @@ and the supported subgroup is saved in <code class="xref py py-attr docutils lit
 <span class="go">Cs</span>
 </pre></div>
 </div>
-<p>Currently, PySCF supports the linear molecular symmetries
+<p>Currently, PySCF supports linear molecular symmetries
 <span class="math notranslate nohighlight">\(D_{\infty h}\)</span> (labelled as <code class="docutils literal notranslate"><span class="pre">Dooh</span></code> in the program) and <span class="math notranslate nohighlight">\(C_{\infty v}\)</span>
 (labelled as <code class="docutils literal notranslate"><span class="pre">Coov</span></code>), the <span class="math notranslate nohighlight">\(D_{2h}\)</span> group and its subgroups.
 Sometimes it is necessary to use a lower symmetry instead of the detected
@@ -634,7 +634,7 @@ following SCF or post-SCF calculations:</p>
 </div>
 <p>To label the irreducible representation of given orbitals,
 <code class="xref py py-func docutils literal notranslate"><span class="pre">symm.label_orb_symm()</span></code> needs the information of the point group
-symmetry which are initialized in the <code class="xref py py-class docutils literal notranslate"><span class="pre">Mole</span></code> object, including the IDs of
+symmetry which is initialized in the <code class="xref py py-class docutils literal notranslate"><span class="pre">Mole</span></code> object, including the IDs of
 irreducible representations (<code class="xref py py-attr docutils literal notranslate"><span class="pre">Mole.irrep_id</span></code>) and the symmetry
 adapted basis <code class="xref py py-attr docutils literal notranslate"><span class="pre">Mole.symm_orb</span></code>. For each <code class="xref py py-attr docutils literal notranslate"><span class="pre">irrep_id</span></code>,
 <code class="xref py py-attr docutils literal notranslate"><span class="pre">Mole.irrep_name</span></code> gives the associated irrep symbol (A1, B1 …).

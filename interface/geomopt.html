@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>7.2. geomopt — Geometry optimization &mdash; PySCF 1.7.6 documentation</title>
+  <title>7.2. geomopt — Geometry optimization &mdash; PySCF 2.0.0 documentation</title>
   
 
   
@@ -63,7 +63,7 @@
             
             
               <div class="version">
-                1.7
+                2.0
               </div>
             
           
@@ -184,7 +184,7 @@
 <p>The <a class="reference internal" href="#module-geomopt" title="geomopt: geometry optimization"><code class="xref py py-mod docutils literal notranslate"><span class="pre">geomopt</span></code></a> module implements geometry optimization via
 interfaces to <a class="reference external" href="https://github.com/leeping/geomeTRIC">geomeTRIC</a>
 and <a class="reference external" href="https://github.com/jhrmnn/pyberny">PyBerny</a>.
-The following example shows how to optimize the structure of N<sub>2</sub> molecule with PyBerny:</p>
+The following example shows how to optimize the structure of the N<sub>2</sub> molecule with PyBerny:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pyscf</span> <span class="kn">import</span> <span class="n">gto</span><span class="p">,</span> <span class="n">scf</span>
 <span class="kn">from</span> <span class="nn">pyscf.geomopt.berny_solver</span> <span class="kn">import</span> <span class="n">optimize</span>
 <span class="n">mol</span> <span class="o">=</span> <span class="n">gto</span><span class="o">.</span><span class="n">M</span><span class="p">(</span><span class="n">atom</span><span class="o">=</span><span class="s1">&#39;N 0 0 0; N 0 0 1.2&#39;</span><span class="p">,</span> <span class="n">basis</span><span class="o">=</span><span class="s1">&#39;ccpvdz&#39;</span><span class="p">)</span>

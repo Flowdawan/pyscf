@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>5.12. AO to MO transformation &mdash; PySCF 1.7.6 documentation</title>
+  <title>5.7. AO to MO transformation &mdash; PySCF 2.0.0 documentation</title>
   
 
   
@@ -38,8 +38,8 @@
     
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="5.13. Density fitting" href="df_developer.html" />
-    <link rel="prev" title="5.11. Second-order SCF solver" href="soscf_developer.html" /> 
+    <link rel="next" title="5.8. Electron Phonon Coupling" href="eph_developer.html" />
+    <link rel="prev" title="5.6. Auxiliary second-order Green’s function perturbation theory (AGF2)" href="agf2_developer.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -63,7 +63,7 @@
             
             
               <div class="version">
-                1.7
+                2.0
               </div>
             
           
@@ -99,24 +99,16 @@
 <li class="toctree-l2"><a class="reference internal" href="gto_developer.html">5.3. Molecules and Crystal Unit Cells</a></li>
 <li class="toctree-l2"><a class="reference internal" href="scf_developer.html">5.4. Self-consistent field (SCF) methods</a></li>
 <li class="toctree-l2"><a class="reference internal" href="dft_developer.html">5.5. Density functional theory (DFT)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tdscf_developer.html">5.6. Time-dependent SCF</a></li>
-<li class="toctree-l2"><a class="reference internal" href="fci_developer.html">5.7. Full CI solver</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cc_developer.html">5.8. Coupled Cluster Methods</a></li>
-<li class="toctree-l2"><a class="reference internal" href="agf2_developer.html">5.9. Auxiliary second-order Green’s function perturbation theory (AGF2)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="mcscf_developer.html">5.10. Multi-configuration SCF</a></li>
-<li class="toctree-l2"><a class="reference internal" href="soscf_developer.html">5.11. Second-order SCF solver</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">5.12. AO to MO transformation</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#overview">5.12.1. Overview</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#the-kernel-function">5.12.2. The kernel function</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#load-the-integrals">5.12.3. Load the integrals</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#transform-integrals-between-symmetries">5.12.4. Transform integrals between symmetries</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#note">5.12.5. Note</a></li>
+<li class="toctree-l2"><a class="reference internal" href="agf2_developer.html">5.6. Auxiliary second-order Green’s function perturbation theory (AGF2)</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">5.7. AO to MO transformation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#overview">5.7.1. Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#the-kernel-function">5.7.2. The kernel function</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#load-the-integrals">5.7.3. Load the integrals</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#transform-integrals-between-symmetries">5.7.4. Transform integrals between symmetries</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#note">5.7.5. Note</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="df_developer.html">5.13. Density fitting</a></li>
-<li class="toctree-l2"><a class="reference internal" href="pbc_developer.html">5.14. Periodic boundary conditions</a></li>
-<li class="toctree-l2"><a class="reference internal" href="eph_developer.html">5.15. Electron Phonon Coupling</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../advanced.html">5.16. Miscellaneous</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eph_developer.html">5.8. Electron Phonon Coupling</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../modules.html">6. API documentation</a></li>
@@ -171,7 +163,7 @@
         
           <li><a href="../develop.html"><span class="section-number">5. </span>Developer documentation</a> &raquo;</li>
         
-      <li><span class="section-number">5.12. </span>AO to MO transformation</li>
+      <li><span class="section-number">5.7. </span>AO to MO transformation</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -191,10 +183,10 @@
            <div itemprop="articleBody">
             
   <div class="section" id="ao-to-mo-transformation">
-<span id="developer-ao2mo"></span><h1><span class="section-number">5.12. </span>AO to MO transformation<a class="headerlink" href="#ao-to-mo-transformation" title="Permalink to this headline">¶</a></h1>
+<span id="developer-ao2mo"></span><h1><span class="section-number">5.7. </span>AO to MO transformation<a class="headerlink" href="#ao-to-mo-transformation" title="Permalink to this headline">¶</a></h1>
 <p><em>Modules</em>: <a class="reference internal" href="../modules/ao2mo.html#module-ao2mo" title="ao2mo: transformations from AO to MO integrals for various permutational and spin symmetries."><code class="xref py py-mod docutils literal notranslate"><span class="pre">ao2mo</span></code></a></p>
 <div class="section" id="overview">
-<h2><span class="section-number">5.12.1. </span>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">5.7.1. </span>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
 <p>The <a class="reference internal" href="../modules/ao2mo.html#module-ao2mo" title="ao2mo: transformations from AO to MO integrals for various permutational and spin symmetries."><code class="xref py py-mod docutils literal notranslate"><span class="pre">ao2mo</span></code></a> module exposes important functionality for transforming 2-electron integrals, i.e. the 4-index transformation from atomic orbitals (AOs) to molecular orbitals (MOs).
 The most important functions are <a class="reference internal" href="#kernel" title="kernel"><code class="xref py py-func docutils literal notranslate"><span class="pre">kernel()</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">load</span></code>, <code class="xref py py-func docutils literal notranslate"><span class="pre">restore()</span></code>.
 The function <a class="reference internal" href="#kernel" title="kernel"><code class="xref py py-func docutils literal notranslate"><span class="pre">kernel()</span></code></a> takes in a <code class="xref py py-class docutils literal notranslate"><span class="pre">Mole</span></code> object or the AO integrals stored in a <code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code> and a set of MO coefficients.
@@ -244,7 +236,7 @@ If <code class="docutils literal notranslate"><span class="pre">erifile</span></
 </div>
 </div>
 <div class="section" id="the-kernel-function">
-<h2><span class="section-number">5.12.2. </span>The kernel function<a class="headerlink" href="#the-kernel-function" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">5.7.2. </span>The kernel function<a class="headerlink" href="#the-kernel-function" title="Permalink to this headline">¶</a></h2>
 <dl class="py function">
 <dt id="kernel">
 <code class="sig-name descname"><span class="pre">kernel</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eri_or_mol</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mo_coeffs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">erifile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'eri_mo'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">intor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'int2e'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#kernel" title="Permalink to this definition">¶</a></dt>
@@ -266,7 +258,7 @@ If <code class="docutils literal notranslate"><span class="pre">erifile</span></
 
 </div>
 <div class="section" id="load-the-integrals">
-<h2><span class="section-number">5.12.3. </span>Load the integrals<a class="headerlink" href="#load-the-integrals" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">5.7.3. </span>Load the integrals<a class="headerlink" href="#load-the-integrals" title="Permalink to this headline">¶</a></h2>
 <p>Since integrals are stored in a HDF5 file when the outcore algorithm is used,
 Pyscf provides the <code class="xref py py-class docutils literal notranslate"><span class="pre">load</span></code> to help users access the integrals stored in the HDF5 file.
 It takes a flexible ranges of objects including a <code class="docutils literal notranslate"><span class="pre">str</span></code> which is the name of the HDF5 file, a <code class="xref py py-class docutils literal notranslate"><span class="pre">h5py.File</span></code> object, a <code class="xref py py-class docutils literal notranslate"><span class="pre">h5py.Group</span></code> object and a numpy array.
@@ -292,7 +284,7 @@ The <code class="xref py py-class docutils literal notranslate"><span class="pre
 </div>
 </div>
 <div class="section" id="transform-integrals-between-symmetries">
-<h2><span class="section-number">5.12.4. </span>Transform integrals between symmetries<a class="headerlink" href="#transform-integrals-between-symmetries" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">5.7.4. </span>Transform integrals between symmetries<a class="headerlink" href="#transform-integrals-between-symmetries" title="Permalink to this headline">¶</a></h2>
 <p>The function <code class="xref py py-func docutils literal notranslate"><span class="pre">restore()</span></code> can transform 2e integrals or any 4-index quantity (e.g. 2rdm) between different permutation symmetries.
 It takes a symmetry label, a <code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code> as the 4-index quantity and the dimension <code class="docutils literal notranslate"><span class="pre">norb</span></code> of this quantity (the four indices
 must have the same dimension).
@@ -333,7 +325,7 @@ If the input does not correspond to any of the above shapes, PySCF will throw an
 </table>
 </div>
 <div class="section" id="note">
-<h2><span class="section-number">5.12.5. </span>Note<a class="headerlink" href="#note" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">5.7.5. </span>Note<a class="headerlink" href="#note" title="Permalink to this headline">¶</a></h2>
 <p>The examples in this document can be found as a single python script in <a class="reference external" href="https://github.com/pyscf/pyscf/tree/master/examples/ao2mo/02-ao2mo_doc.py">examples/ao2mo/02-ao2mo_doc.py</a>,
 more examples can also be found at <a class="reference external" href="https://github.com/pyscf/pyscf/tree/master/examples/ao2mo/02-ao2mo_doc.py">examples/ao2mo/02-ao2mo_doc.py</a> directory.</p>
 </div>
@@ -345,8 +337,8 @@ more examples can also be found at <a class="reference external" href="https://g
           </div>
           <footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="df_developer.html" class="btn btn-neutral float-right" title="5.13. Density fitting" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
-        <a href="soscf_developer.html" class="btn btn-neutral float-left" title="5.11. Second-order SCF solver" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="eph_developer.html" class="btn btn-neutral float-right" title="5.8. Electron Phonon Coupling" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="agf2_developer.html" class="btn btn-neutral float-left" title="5.6. Auxiliary second-order Green’s function perturbation theory (AGF2)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 
   <hr/>

@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>Multi-Reference Perturbation Theory (MRPT) &mdash; PySCF 1.7.6 documentation</title>
+  <title>4.11. Multi-Reference Perturbation Theory (MRPT) &mdash; PySCF 2.0.0 documentation</title>
   
 
   
@@ -37,7 +37,9 @@
 
     
     <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" /> 
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="4.12. Time-dependent Hartree-Fock and Density Functional Theory" href="tddft.html" />
+    <link rel="prev" title="4.10. Multi-configuration self-consistent field (MCSCF)" href="mcscf.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -61,7 +63,7 @@
             
             
               <div class="version">
-                1.7
+                2.0
               </div>
             
           
@@ -86,11 +88,38 @@
               
             
             
-              <ul>
+              <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../overview.html">1. An overview of PySCF</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../install.html">2. Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../quickstart.html">3. Quickstart</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../user.html">4. User guide</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../user.html">4. User guide</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="gto.html">4.1. Molecular structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scf.html">4.2. Self-consistent field (SCF) methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dft.html">4.3. Density functional theory (DFT)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mp.html">4.4. Second-Order Møller–Plesset Perturbation Theory (MP2)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gw.html">4.5. GW approximation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ci.html">4.6. Configuration interaction (CISD and FCI)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cc.html">4.7. Coupled-cluster theory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adc.html">4.8. Algebraic diagrammatic construction (ADC) scheme</a></li>
+<li class="toctree-l2"><a class="reference internal" href="agf2.html">4.9. Auxiliary second-order Green’s function perturbation theory (AGF2)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mcscf.html">4.10. Multi-configuration self-consistent field (MCSCF)</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">4.11. Multi-Reference Perturbation Theory (MRPT)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#introduction">4.11.1. Introduction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#compressed-perturber-functions">4.11.2. Compressed Perturber Functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#references">4.11.3. References</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="tddft.html">4.12. Time-dependent Hartree-Fock and Density Functional Theory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="solvent.html">4.13. Solvation models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="qmmm.html">4.14. QM/MM methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="df.html">4.15. Density fitting (DF)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pbc.html">4.16. Periodic boundary conditions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eph.html">4.17. Electron Phonon Matrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lo.html">4.18. Localized Orbitals</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sgx.html">4.19. Seminumerical Exchange (SGX)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="geomopt.html">4.20. Geometry optimization</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="../develop.html">5. Developer documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../modules.html">6. API documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../interface.html">7. Interfaces</a></li>
@@ -142,7 +171,9 @@
     
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
         
-      <li>Multi-Reference Perturbation Theory (MRPT)</li>
+          <li><a href="../user.html"><span class="section-number">4. </span>User guide</a> &raquo;</li>
+        
+      <li><span class="section-number">4.11. </span>Multi-Reference Perturbation Theory (MRPT)</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -162,10 +193,10 @@
            <div itemprop="articleBody">
             
   <div class="section" id="multi-reference-perturbation-theory-mrpt">
-<span id="user-mrpt"></span><h1>Multi-Reference Perturbation Theory (MRPT)<a class="headerlink" href="#multi-reference-perturbation-theory-mrpt" title="Permalink to this headline">¶</a></h1>
+<span id="user-mrpt"></span><h1><span class="section-number">4.11. </span>Multi-Reference Perturbation Theory (MRPT)<a class="headerlink" href="#multi-reference-perturbation-theory-mrpt" title="Permalink to this headline">¶</a></h1>
 <p><em>Modules</em>: <code class="xref py py-mod docutils literal notranslate"><span class="pre">mrpt</span></code></p>
 <div class="section" id="introduction">
-<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">4.11.1. </span>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
 <p>A second-order perturbative energy correction can be added on top of a multireference wave function.
 The MRPT module in PySCF supports the second-order N-electron valence state perturbation theory (NEVPT2) <a class="bibtex reference internal" href="#angeli2001nevpt" id="id1">[1]</a>
 using the strongly contracted (SC) internal contraction scheme, <a class="bibtex reference internal" href="#angeli2001scnevpt" id="id2">[2]</a><a class="bibtex reference internal" href="#angeli2002" id="id3">[3]</a> which is an intruder-state-free MRPT.
@@ -185,7 +216,7 @@ By default, the NEVPT2 calculation is performed for the lowest root, <cite>Root_
 with the FCI solver, and those with the DMRG solver.</p>
 </div>
 <div class="section" id="compressed-perturber-functions">
-<h2>Compressed Perturber Functions<a class="headerlink" href="#compressed-perturber-functions" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">4.11.2. </span>Compressed Perturber Functions<a class="headerlink" href="#compressed-perturber-functions" title="Permalink to this headline">¶</a></h2>
 <p>The bottleneck in SC-NEVPT2 is the evaluation of the energies of the perturber functions,
 where up to the 4-particle reduced density matrix (4-RDM) appears.
 In DMRG-SC-NEVPT2, this evaluation is done with the compressed bond dimension (M’) which is smaller than
@@ -194,7 +225,7 @@ It can be specified by <code class="docutils literal notranslate"><span class="p
 <p>More information can be found in Reference <a class="bibtex reference internal" href="#guo2016" id="id5">[4]</a></p>
 </div>
 <div class="section" id="references">
-<h2>References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">4.11.3. </span>References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h2>
 <p id="bibtex-bibliography-user/mrpt-0"><dl class="citation">
 <dt class="bibtex label" id="angeli2001nevpt"><span class="brackets"><a class="fn-backref" href="#id1">1</a></span></dt>
 <dd><p>Celestino Angeli, Renzo Cimiraglia, S Evangelisti, T Leininger, and J-P Malrieu. Introduction of n-electron valence states for multireference perturbation theory. <em>J. Chem. Phys.</em>, 114(23):10252–10264, 2001. <a class="reference external" href="https://doi.org/10.1063/1.1361246">doi:10.1063/1.1361246</a>.</p>
@@ -218,6 +249,10 @@ It can be specified by <code class="docutils literal notranslate"><span class="p
            
           </div>
           <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="tddft.html" class="btn btn-neutral float-right" title="4.12. Time-dependent Hartree-Fock and Density Functional Theory" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="mcscf.html" class="btn btn-neutral float-left" title="4.10. Multi-configuration self-consistent field (MCSCF)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
 
   <hr/>
 

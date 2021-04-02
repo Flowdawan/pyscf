@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>4.13. QM/MM methods &mdash; PySCF 1.7.6 documentation</title>
+  <title>4.14. QM/MM methods &mdash; PySCF 2.0.0 documentation</title>
   
 
   
@@ -39,8 +39,8 @@
     
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="4.14. Relativistic calculations" href="x2c.html" />
-    <link rel="prev" title="4.12. Solvation models" href="solvent.html" /> 
+    <link rel="next" title="4.15. Density fitting (DF)" href="df.html" />
+    <link rel="prev" title="4.13. Solvation models" href="solvent.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -64,7 +64,7 @@
             
             
               <div class="version">
-                1.7
+                2.0
               </div>
             
           
@@ -104,15 +104,15 @@
 <li class="toctree-l2"><a class="reference internal" href="adc.html">4.8. Algebraic diagrammatic construction (ADC) scheme</a></li>
 <li class="toctree-l2"><a class="reference internal" href="agf2.html">4.9. Auxiliary second-order Green’s function perturbation theory (AGF2)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="mcscf.html">4.10. Multi-configuration self-consistent field (MCSCF)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tddft.html">4.11. Time-dependent Hartree-Fock and Density Functional Theory</a></li>
-<li class="toctree-l2"><a class="reference internal" href="solvent.html">4.12. Solvation models</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">4.13. QM/MM methods</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#introduction">4.13.1. Introduction</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#scf-methods-with-mm-charges">4.13.2. SCF methods with MM charges</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#post-scf-methods-with-mm-charges">4.13.3. Post-SCF methods with MM charges</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mrpt.html">4.11. Multi-Reference Perturbation Theory (MRPT)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tddft.html">4.12. Time-dependent Hartree-Fock and Density Functional Theory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="solvent.html">4.13. Solvation models</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">4.14. QM/MM methods</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#introduction">4.14.1. Introduction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#scf-methods-with-mm-charges">4.14.2. SCF methods with MM charges</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#post-scf-methods-with-mm-charges">4.14.3. Post-SCF methods with MM charges</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="x2c.html">4.14. Relativistic calculations</a></li>
 <li class="toctree-l2"><a class="reference internal" href="df.html">4.15. Density fitting (DF)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pbc.html">4.16. Periodic boundary conditions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="eph.html">4.17. Electron Phonon Matrix</a></li>
@@ -174,7 +174,7 @@
         
           <li><a href="../user.html"><span class="section-number">4. </span>User guide</a> &raquo;</li>
         
-      <li><span class="section-number">4.13. </span>QM/MM methods</li>
+      <li><span class="section-number">4.14. </span>QM/MM methods</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -194,10 +194,10 @@
            <div itemprop="articleBody">
             
   <div class="section" id="qm-mm-methods">
-<span id="user-qmmm"></span><h1><span class="section-number">4.13. </span>QM/MM methods<a class="headerlink" href="#qm-mm-methods" title="Permalink to this headline">¶</a></h1>
+<span id="user-qmmm"></span><h1><span class="section-number">4.14. </span>QM/MM methods<a class="headerlink" href="#qm-mm-methods" title="Permalink to this headline">¶</a></h1>
 <p><em>Modules</em>: <code class="xref py py-mod docutils literal notranslate"><span class="pre">qmmm</span></code></p>
 <div class="section" id="introduction">
-<h2><span class="section-number">4.13.1. </span>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">4.14.1. </span>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
 <p>In the Quantum Mechanics - Molecular Mechanics (QM/MM) method,
 the system is divided into a QM region and an MM region.
 QM/MM models mainly differ in the treatment of the interaction
@@ -223,7 +223,7 @@ QM region and MM particles.</p>
 <a class="reference internal" href="solvent.html#module-solvent" title="solvent: Solvation models and solvent effects"><code class="xref py py-mod docutils literal notranslate"><span class="pre">solvent</span></code></a> module. See <a class="reference internal" href="solvent.html#user-solvent"><span class="std std-ref">Solvation models</span></a> for details.</p>
 </div>
 <div class="section" id="scf-methods-with-mm-charges">
-<h2><span class="section-number">4.13.2. </span>SCF methods with MM charges<a class="headerlink" href="#scf-methods-with-mm-charges" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">4.14.2. </span>SCF methods with MM charges<a class="headerlink" href="#scf-methods-with-mm-charges" title="Permalink to this headline">¶</a></h2>
 <p>MM background charges support SCF methods
 <code class="xref py py-func docutils literal notranslate"><span class="pre">scf.RHF()</span></code>, <code class="xref py py-func docutils literal notranslate"><span class="pre">scf.UHF()</span></code>, <code class="xref py py-func docutils literal notranslate"><span class="pre">scf.ROHF()</span></code>,
 <code class="xref py py-func docutils literal notranslate"><span class="pre">scf.RKS()</span></code>, <code class="xref py py-func docutils literal notranslate"><span class="pre">scf.UKS()</span></code> and <code class="xref py py-func docutils literal notranslate"><span class="pre">scf.ROKS()</span></code>,
@@ -281,7 +281,7 @@ will be missing the contributions from the background charges.</p>
 <p>MM charges can also be used together with second order scf and solvation models.</p>
 </div>
 <div class="section" id="post-scf-methods-with-mm-charges">
-<h2><span class="section-number">4.13.3. </span>Post-SCF methods with MM charges<a class="headerlink" href="#post-scf-methods-with-mm-charges" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">4.14.3. </span>Post-SCF methods with MM charges<a class="headerlink" href="#post-scf-methods-with-mm-charges" title="Permalink to this headline">¶</a></h2>
 <p>Once function <code class="xref py py-func docutils literal notranslate"><span class="pre">qmmm.mm_charge()</span></code> is
 applied on the SCF object, it affects all the
 post-HF calculations, eg. MP2, CCSD, MCSCF, etc.</p>
@@ -302,8 +302,8 @@ post-HF calculations, eg. MP2, CCSD, MCSCF, etc.</p>
           </div>
           <footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="x2c.html" class="btn btn-neutral float-right" title="4.14. Relativistic calculations" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
-        <a href="solvent.html" class="btn btn-neutral float-left" title="4.12. Solvation models" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="df.html" class="btn btn-neutral float-right" title="4.15. Density fitting (DF)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="solvent.html" class="btn btn-neutral float-left" title="4.13. Solvation models" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 
   <hr/>
