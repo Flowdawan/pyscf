@@ -203,12 +203,68 @@ using the strongly contracted (SC) internal contraction scheme, <a class="bibtex
 SC-NEVPT2 can be applied to CASCI/CASSCF wave functions produced by the FCI or DMRG solvers. <a class="bibtex reference internal" href="#guo2016" id="id4">[4]</a>
 The number of the CI root needs to be specified for state-specific NEVPT2 calculations with <code class="docutils literal notranslate"><span class="pre">mrpt.NEVPT(mc,root=Root_ID)</span></code>.
 By default, the NEVPT2 calculation is performed for the lowest root, <cite>Root_ID=0</cite>.</p>
-<p>A simple example of SC-NEVPT2 calculations with the FCI and DMRG solvers is given in <a class="reference external" href="https://github.com/pyscf/pyscf/tree/master/examples/mrpt/03-dmrg_nevpt2.py">examples/mrpt/03-dmrg_nevpt2.py</a>:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">..</span> <span class="n">literalinclude</span><span class="p">::</span> <span class="o">../../</span><span class="n">examples</span><span class="o">/</span><span class="n">mrpt</span><span class="o">/</span><span class="mi">03</span><span class="o">-</span><span class="n">dmrg_nevpt2</span><span class="o">.</span><span class="n">py</span>
+<p>A simple example of SC-NEVPT2 calculations with the FCI and DMRG solvers is given in <a class="reference external" href="https://github.com/pyscf/pyscf/tree/master/examples/mrpt/03-dmrg_nevpt2.py">examples/mrpt/03-dmrg_nevpt2.py</a></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="c1">#</span>
+<span class="c1"># Author: Sheng Guo &lt;shengg@princeton.edu&gt;</span>
+<span class="c1">#         Qiming Sun &lt;osirpt.sun@gmail.com&gt;</span>
+<span class="c1">#         Seunghoon Lee &lt;seunghoonlee89@gmail.com&gt;</span>
+<span class="c1">#</span>
+
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">DMRG-CASCI then DMRG-NEVPT2 calculation.</span>
+
+<span class="sd">There are two NEVPT2 implementations available for DMRG Block program.  The slow</span>
+<span class="sd">version (default) strictly follows the formula presented in JCP, 117(2002), 9138</span>
+<span class="sd">in which the 4-particle density matrix is explictly computed.  Typically 26</span>
+<span class="sd">orbitals is the upper limit of the slow version due to the large requirements</span>
+<span class="sd">on the memory usage.  The fast version employs the so called MPS-pertuber</span>
+<span class="sd">technique.  It is able to handle much larger systems, up to about 30 orbitals.</span>
+<span class="sd">&#39;&#39;&#39;</span>
+
+<span class="kn">from</span> <span class="nn">pyscf</span> <span class="kn">import</span> <span class="n">gto</span><span class="p">,</span> <span class="n">scf</span><span class="p">,</span> <span class="n">mcscf</span><span class="p">,</span> <span class="n">mrpt</span><span class="p">,</span> <span class="n">dmrgscf</span>
+<span class="n">mol</span> <span class="o">=</span> <span class="n">gto</span><span class="o">.</span><span class="n">M</span><span class="p">(</span><span class="n">atom</span> <span class="o">=</span> <span class="p">[[</span><span class="s1">&#39;H&#39;</span><span class="p">,</span> <span class="p">(</span><span class="mf">0.</span><span class="p">,</span><span class="mf">0.</span><span class="p">,</span><span class="n">i</span><span class="o">-</span><span class="mf">3.5</span><span class="p">)]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">8</span><span class="p">)],</span><span class="n">basis</span> <span class="o">=</span> <span class="s1">&#39;sto-3g&#39;</span><span class="p">,</span><span class="n">symmetry</span><span class="o">=</span><span class="s1">&#39;d2h&#39;</span><span class="p">)</span>
+<span class="n">m</span> <span class="o">=</span> <span class="n">scf</span><span class="o">.</span><span class="n">RHF</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+
+<span class="c1">##############################################################################</span>
+<span class="c1">#</span>
+<span class="c1"># FCI-based CASCI + NEVPT2.  Two roots are computed.  mc.ci holds the two CI</span>
+<span class="c1"># wave functions.  Root ID needs to be specified for the state-specific NEVPT2</span>
+<span class="c1"># calculation.  By default the lowest root is computed.</span>
+<span class="c1">#</span>
+<span class="c1">##############################################################################</span>
+<span class="n">mc</span> <span class="o">=</span> <span class="n">mcscf</span><span class="o">.</span><span class="n">CASCI</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+<span class="n">mc</span><span class="o">.</span><span class="n">fcisolver</span><span class="o">.</span><span class="n">nroots</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="n">mc</span><span class="o">.</span><span class="n">fix_spin_</span><span class="p">(</span><span class="n">shift</span><span class="o">=.</span><span class="mi">5</span><span class="p">,</span> <span class="n">ss</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">mc</span><span class="o">.</span><span class="n">kernel</span><span class="p">()</span>
+
+<span class="n">ci_nevpt_e1</span> <span class="o">=</span> <span class="n">mrpt</span><span class="o">.</span><span class="n">NEVPT</span><span class="p">(</span><span class="n">mc</span><span class="p">,</span> <span class="n">root</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">kernel</span><span class="p">()</span>
+<span class="n">ci_nevpt_e2</span> <span class="o">=</span> <span class="n">mrpt</span><span class="o">.</span><span class="n">NEVPT</span><span class="p">(</span><span class="n">mc</span><span class="p">,</span> <span class="n">root</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">kernel</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;FCI NEVPT correlation E = </span><span class="si">%.15g</span><span class="s1"> </span><span class="si">%.15g</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">ci_nevpt_e1</span><span class="p">,</span> <span class="n">ci_nevpt_e2</span><span class="p">))</span>
+
+<span class="c1">##################################################</span>
+<span class="c1">#</span>
+<span class="c1"># DMRG-NEVPT2 fast version</span>
+<span class="c1"># Use compressed MPS as perturber functions for SC-NEVPT2.</span>
+<span class="c1"># 4-particle density matrix is not computed.</span>
+<span class="c1">#</span>
+<span class="c1">##################################################</span>
+
+<span class="n">mc</span> <span class="o">=</span> <span class="n">mcscf</span><span class="o">.</span><span class="n">CASCI</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+<span class="n">dmrgscf</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">MPIPREFIX</span> <span class="o">=</span><span class="s1">&#39;&#39;</span>
+<span class="n">mc</span><span class="o">.</span><span class="n">fcisolver</span> <span class="o">=</span> <span class="n">dmrgscf</span><span class="o">.</span><span class="n">DMRGCI</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span> <span class="n">maxM</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
+<span class="n">mc</span><span class="o">.</span><span class="n">fcisolver</span><span class="o">.</span><span class="n">nroots</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="n">mc</span><span class="o">.</span><span class="n">kernel</span><span class="p">()</span>
+
+<span class="n">mps_nevpt_e1</span> <span class="o">=</span> <span class="n">mrpt</span><span class="o">.</span><span class="n">NEVPT</span><span class="p">(</span><span class="n">mc</span><span class="p">,</span> <span class="n">root</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">compress_approx</span><span class="p">(</span><span class="n">maxM</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span><span class="o">.</span><span class="n">kernel</span><span class="p">()</span>
+<span class="n">mps_nevpt_e2</span> <span class="o">=</span> <span class="n">mrpt</span><span class="o">.</span><span class="n">NEVPT</span><span class="p">(</span><span class="n">mc</span><span class="p">,</span> <span class="n">root</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">compress_approx</span><span class="p">(</span><span class="n">maxM</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span><span class="o">.</span><span class="n">kernel</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;MPS NEVPT correlation E = </span><span class="si">%.15g</span><span class="s1"> </span><span class="si">%.15g</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">mps_nevpt_e1</span><span class="p">,</span> <span class="n">mps_nevpt_e2</span><span class="p">,))</span>
 </pre></div>
 </div>
 <p>which outputs</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">CI</span> <span class="n">NEVPT</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.0655571220984536</span> <span class="o">-</span><span class="mf">0.0805814569225376</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">FCI</span> <span class="n">NEVPT</span> <span class="n">correlation</span> <span class="n">E</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.0655576579894365</span> <span class="o">-</span><span class="mf">0.0913916717329482</span>
 <span class="n">MPS</span> <span class="n">NEVPT</span> <span class="n">correlation</span> <span class="n">E</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.0655570680554582</span> <span class="o">-</span><span class="mf">0.0913913618723217</span>
 </pre></div>
 </div>

@@ -2270,6 +2270,23 @@ orbitals.</p>
 </dd></dl>
 
 <dl class="py function">
+<dt id="pyscf.mcscf.addons.make_natural_orbitals">
+<code class="sig-prename descclassname"><span class="pre">pyscf.mcscf.addons.</span></code><code class="sig-name descname"><span class="pre">make_natural_orbitals</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">method_obj</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyscf/mcscf/addons.html#make_natural_orbitals"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyscf.mcscf.addons.make_natural_orbitals" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make natural orbitals from a general PySCF method object. 
+See Eqn. (1) in Keller et al. [DOI:10.1063/1.4922352] for details.</p>
+<dl>
+<dt>Args:</dt><dd><dl>
+<dt>method_obj<span class="classifier">Any PySCF method that has the function <cite>make_rdm1</cite> with kwarg </span></dt><dd><p><cite>ao_repr</cite>. This object can be a restricted OR unrestricted method.</p>
+</dd>
+</dl>
+</dd>
+<dt>Returns:</dt><dd><p>noons : A 1-D array of the natural orbital occupations (NOONs).</p>
+<p>natorbs : A set of natural orbitals made from method_obj.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt id="pyscf.mcscf.addons.make_rdm1">
 <code class="sig-prename descclassname"><span class="pre">pyscf.mcscf.addons.</span></code><code class="sig-name descname"><span class="pre">make_rdm1</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">casscf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mo_coeff</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ci</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyscf/mcscf/addons.html#make_rdm1"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyscf.mcscf.addons.make_rdm1" title="Permalink to this definition">¶</a></dt>
 <dd><p>One-particle densit matrix in AO representation</p>
