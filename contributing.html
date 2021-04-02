@@ -1,0 +1,321 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>5.2. How to contribute &mdash; PySCF 1.7.6 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="5.3. Molecules and Crystal Unit Cells" href="develop/gto_developer.html" />
+    <link rel="prev" title="5.1. Code standard" href="code-rule.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> PySCF
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.7
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="overview.html">1. An overview of PySCF</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">2. Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">3. Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user.html">4. User guide</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="develop.html">5. Developer documentation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="code-rule.html">5.1. Code standard</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">5.2. How to contribute</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#standards-for-core-modules">5.2.1. Standards for core modules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#how-to-make-an-extension">5.2.2. How to make an extension</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#how-to-release-a-new-version">5.2.3. How to release a new version</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="develop/gto_developer.html">5.3. Molecules and Crystal Unit Cells</a></li>
+<li class="toctree-l2"><a class="reference internal" href="develop/scf_developer.html">5.4. Self-consistent field (SCF) methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="develop/dft_developer.html">5.5. Density functional theory (DFT)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="develop/tdscf_developer.html">5.6. Time-dependent SCF</a></li>
+<li class="toctree-l2"><a class="reference internal" href="develop/fci_developer.html">5.7. Full CI solver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="develop/cc_developer.html">5.8. Coupled Cluster Methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="develop/agf2_developer.html">5.9. Auxiliary second-order Green’s function perturbation theory (AGF2)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="develop/mcscf_developer.html">5.10. Multi-configuration SCF</a></li>
+<li class="toctree-l2"><a class="reference internal" href="develop/soscf_developer.html">5.11. Second-order SCF solver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="develop/ao2mo_developer.html">5.12. AO to MO transformation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="develop/df_developer.html">5.13. Density fitting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="develop/pbc_developer.html">5.14. Periodic boundary conditions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="develop/eph_developer.html">5.15. Electron Phonon Coupling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="advanced.html">5.16. Miscellaneous</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">6. API documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="interface.html">7. Interfaces</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">PySCF</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="develop.html"><span class="section-number">5. </span>Developer documentation</a> &raquo;</li>
+        
+      <li><span class="section-number">5.2. </span>How to contribute</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/contributing.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="how-to-contribute">
+<h1><span class="section-number">5.2. </span>How to contribute<a class="headerlink" href="#how-to-contribute" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="standards-for-core-modules">
+<h2><span class="section-number">5.2.1. </span>Standards for core modules<a class="headerlink" href="#standards-for-core-modules" title="Permalink to this headline">¶</a></h2>
+<p>In PySCF-2.0, features are split into core modules and extension projects.
+Extension projects are hosted at <a class="reference external" href="https://github.com/pyscf">https://github.com/pyscf</a>.
+The standards for features in the core modules are</p>
+<ul class="simple">
+<li><p><strong>Documentation</strong>.
+Core modules need to be documented. Documentation should include the
+user-guide, the API manual and a few runnable examples. The document repo is
+<a class="reference external" href="https://github.com/pyscf/pyscf-doc">https://github.com/pyscf/pyscf-doc</a>.</p></li>
+<li><p><strong>Unittests and test coverage</strong>.
+Unittests should be created for all APIs of the core modules.</p></li>
+<li><p><strong>Minimal compilation requirements</strong>.
+PySCF core modules are compiled and released in a general Python package.
+These modules need to be compatible with as many platforms and system
+environments as possible. If your code requires specific Python versions,
+specific compiler sets, or specific libraries (e.g. MPI), it is recommended to
+develop the features in the extension project.</p></li>
+</ul>
+</div>
+<div class="section" id="how-to-make-an-extension">
+<h2><span class="section-number">5.2.2. </span>How to make an extension<a class="headerlink" href="#how-to-make-an-extension" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic">
+<li><p>Download the template (<a class="reference external" href="https://github.com/pyscf/extension-template">https://github.com/pyscf/extension-template</a>), run the
+script in the extension template:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ curl https://github.com/pyscf/extension-template/pyscf-extension-template-0.1.0.tar.gz | tar xvzf -
+$ mv extension-template new-project
+$ cd new-project
+$ make new-project
+</pre></div>
+</div>
+</li>
+<li><p>Check whether files like <cite>README.md</cite>, <cite>setup.py</cite>, <cite>__init__.py</cite> are correctly updated.</p></li>
+<li><p>In the new project folder, initialize git repo:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ git init
+$ git add .
+$ git commit -m &quot;An example of new extension package&quot;
+</pre></div>
+</div>
+</li>
+<li><p>If your program needs to compile C/C++ code, you can edit the setup.py to
+include your code files. For example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SO_EXTENSIONS</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="s1">&#39;pyscf.new_feature.new_feature&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;pyscf/new_feature/new_feature.cc&#39;</span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</li>
+<li><p>Release the extension project on <a class="reference external" href="https://github.com/pyscf">https://github.com/pyscf</a>.</p>
+<ul>
+<li><p>Open an issue on <a class="reference external" href="https://github.com/pyscf/pyscf">https://github.com/pyscf/pyscf</a> about the new project.</p></li>
+<li><p>When the issue is approved, a repo will be created under <a class="reference external" href="https://github.com/pyscf/new-project">https://github.com/pyscf/new-project</a>.
+You can run the commands below to sync your local repo to the remote one:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ git remote add origin https://github.com/pyscf/new_project
+$ git push
+</pre></div>
+</div>
+</li>
+<li><p>Open a PR on <a class="reference external" href="https://github.com/pyscf/pyscf">https://github.com/pyscf/pyscf</a> to update the pyscf setup.py.
+In the PR, you can put the new extension project in the field <cite>extras_requires</cite>.</p></li>
+</ul>
+</li>
+</ol>
+</div>
+<div class="section" id="how-to-release-a-new-version">
+<h2><span class="section-number">5.2.3. </span>How to release a new version<a class="headerlink" href="#how-to-release-a-new-version" title="Permalink to this headline">¶</a></h2>
+<p>Since PySCF-2.0, a PR-review-release pipeline was created to release the program
+on pypi, conda and docker. Here are the steps to release a new version:</p>
+<ol class="arabic simple">
+<li><p>Update the <cite>__version__</cite> variable in the file <cite>pyscf/__init__.py</cite></p></li>
+<li><p>In the file CHANGELOG, shortly summarize the new features, the bugfixes or
+other relevant changes</p></li>
+<li><p>Open a PR on <a class="reference external" href="https://github.com/pyscf/pyscf">https://github.com/pyscf/pyscf</a>. When the PR is merged, the
+release pipeline will be automatically triggered. In the action page
+<a class="reference external" href="https://github.com/pyscf/pyscf/actions/workflows/publish.yml">https://github.com/pyscf/pyscf/actions/workflows/publish.yml</a>, check whether
+all jobs are correctly executed.</p></li>
+</ol>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="develop/gto_developer.html" class="btn btn-neutral float-right" title="5.3. Molecules and Crystal Unit Cells" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="code-rule.html" class="btn btn-neutral float-left" title="5.1. Code standard" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2015-2021, The PySCF Developers.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

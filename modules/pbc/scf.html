@@ -92,7 +92,7 @@
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../../overview.html">1. An overview of PySCF</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../install.html">2. Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../tutorial.html">3. Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../quickstart.html">3. Quickstart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../user.html">4. User guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../develop.html">5. Developer documentation</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../../modules.html">6. API documentation</a><ul class="current">
@@ -429,6 +429,10 @@ modules.</p>
 <span class="n">nk</span> <span class="o">=</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">]</span>  <span class="c1"># 4 k-points for each axis, 4^3=64 kpts in total</span>
 <span class="n">kpts</span> <span class="o">=</span> <span class="n">cell</span><span class="o">.</span><span class="n">make_kpts</span><span class="p">(</span><span class="n">nk</span><span class="p">)</span>
 
+<span class="c1"># Note: the default JK builder calls FFTDF scheme which is quite slow for KHF</span>
+<span class="c1"># calculations. The gaussian density fitting (GDF) or range-separation</span>
+<span class="c1"># integration (rsjk builder) methods are more efficient (see example</span>
+<span class="c1"># 21-k_points_all_electron_scf.py)</span>
 <span class="n">kmf</span> <span class="o">=</span> <span class="n">scf</span><span class="o">.</span><span class="n">KRHF</span><span class="p">(</span><span class="n">cell</span><span class="p">,</span> <span class="n">kpts</span><span class="p">)</span>
 <span class="n">kmf</span><span class="o">.</span><span class="n">kernel</span><span class="p">()</span>
 
@@ -707,6 +711,18 @@ basis defined by <code class="docutils literal notranslate"><span class="pre">mo
 <dt>Returns:</dt><dd><p>Density matrix, 2D ndarray</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pyscf.pbc.scf.hf.SCF.jk_method">
+<code class="sig-name descname"><span class="pre">jk_method</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">J</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'FFTDF'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">K</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyscf/pbc/scf/hf.html#SCF.jk_method"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyscf.pbc.scf.hf.SCF.jk_method" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set up the schemes to evaluate Coulomb and exchange matrix</p>
+<p>FFTDF: planewave density fitting using Fast Fourier Transform
+AFTDF: planewave density fitting using analytic Fourier Transform
+GDF: Gaussian density fitting
+MDF: Gaussian and planewave mix density fitting
+RS: range-separation JK builder
+RSDF: range-separation density fitting</p>
 </dd></dl>
 
 <dl class="py method">

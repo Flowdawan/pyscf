@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>4.14. QM/MM methods &mdash; PySCF 1.7.6 documentation</title>
+  <title>4.13. QM/MM methods &mdash; PySCF 1.7.6 documentation</title>
   
 
   
@@ -32,14 +32,15 @@
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
     
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="4.15. Relativistic calculations" href="x2c.html" />
-    <link rel="prev" title="4.13. Solvation models" href="solvent.html" /> 
+    <link rel="next" title="4.14. Relativistic calculations" href="x2c.html" />
+    <link rel="prev" title="4.12. Solvation models" href="solvent.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -91,7 +92,7 @@
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../overview.html">1. An overview of PySCF</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../install.html">2. Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../tutorial.html">3. Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quickstart.html">3. Quickstart</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../user.html">4. User guide</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="gto.html">4.1. Molecular structure</a></li>
 <li class="toctree-l2"><a class="reference internal" href="scf.html">4.2. Self-consistent field (SCF) methods</a></li>
@@ -104,13 +105,20 @@
 <li class="toctree-l2"><a class="reference internal" href="agf2.html">4.9. Auxiliary second-order Green’s function perturbation theory (AGF2)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="mcscf.html">4.10. Multi-configuration self-consistent field (MCSCF)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tddft.html">4.11. Time-dependent Hartree-Fock and Density Functional Theory</a></li>
-<li class="toctree-l2"><a class="reference internal" href="rt.html">4.12. Real-time time-dependent density functional theory</a></li>
-<li class="toctree-l2"><a class="reference internal" href="solvent.html">4.13. Solvation models</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">4.14. QM/MM methods</a></li>
-<li class="toctree-l2"><a class="reference internal" href="x2c.html">4.15. Relativistic calculations</a></li>
-<li class="toctree-l2"><a class="reference internal" href="df.html">4.16. Density fitting</a></li>
-<li class="toctree-l2"><a class="reference internal" href="pbc.html">4.17. Periodic boundary conditions</a></li>
-<li class="toctree-l2"><a class="reference internal" href="eph.html">4.18. Electron Phonon Matrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="solvent.html">4.12. Solvation models</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">4.13. QM/MM methods</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#introduction">4.13.1. Introduction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#scf-methods-with-mm-charges">4.13.2. SCF methods with MM charges</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#post-scf-methods-with-mm-charges">4.13.3. Post-SCF methods with MM charges</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="x2c.html">4.14. Relativistic calculations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="df.html">4.15. Density fitting (DF)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pbc.html">4.16. Periodic boundary conditions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eph.html">4.17. Electron Phonon Matrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lo.html">4.18. Localized Orbitals</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sgx.html">4.19. Seminumerical Exchange (SGX)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="geomopt.html">4.20. Geometry optimization</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../develop.html">5. Developer documentation</a></li>
@@ -166,7 +174,7 @@
         
           <li><a href="../user.html"><span class="section-number">4. </span>User guide</a> &raquo;</li>
         
-      <li><span class="section-number">4.14. </span>QM/MM methods</li>
+      <li><span class="section-number">4.13. </span>QM/MM methods</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -186,8 +194,106 @@
            <div itemprop="articleBody">
             
   <div class="section" id="qm-mm-methods">
-<h1><span class="section-number">4.14. </span>QM/MM methods<a class="headerlink" href="#qm-mm-methods" title="Permalink to this headline">¶</a></h1>
+<span id="user-qmmm"></span><h1><span class="section-number">4.13. </span>QM/MM methods<a class="headerlink" href="#qm-mm-methods" title="Permalink to this headline">¶</a></h1>
 <p><em>Modules</em>: <code class="xref py py-mod docutils literal notranslate"><span class="pre">qmmm</span></code></p>
+<div class="section" id="introduction">
+<h2><span class="section-number">4.13.1. </span>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>In the Quantum Mechanics - Molecular Mechanics (QM/MM) method,
+the system is divided into a QM region and an MM region.
+QM/MM models mainly differ in the treatment of the interaction
+between QM and MM regions.</p>
+<p>The <code class="xref py py-mod docutils literal notranslate"><span class="pre">qmmm</span></code> module implements the electronic embedding model,
+where classical point charges in the MM region are
+added into the QM Hamiltonian analogously to the nuclear charges:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\mathbf{H}_{\mathrm{QMMM}} =&amp;\ \mathbf{H}_{\mathrm{QM}}
+    + \mathbf{V}_{\mathrm{nuc}-\mathrm{MM}} + \mathbf{V}_{\mathrm{elec}-\mathrm{MM}} \\
+    =&amp;\ \mathbf{H}_{\mathrm{QM}} + \sum_{A}^{N_{\mathrm{MM}}} \sum_{B}^{N_{\mathrm{QM}}}
+        \frac{Q_{A}Q_{B}}{|\mathbf{R}_A - \mathbf{R}_B|}
+    - \sum_{A}^{N_{\mathrm{MM}}} \sum_i^{N_{\mathrm{elec}}}
+        \frac{Q_{A}}{|\mathbf{R}_A - \mathbf{r}_i|}\end{split}\]</div>
+<p>The total energy calculated using the above model includes
+the regular QM energy, the interaction between
+the nuclei in QM region and the MM charges, and the static Coulomb
+interaction between the electron density and the MM charges. It does not
+include the static Coulomb interactions of the MM point charges, the MM
+energy, the vdw interaction or other bonding/non-bonding effects between
+QM region and MM particles.</p>
+<p>Another QM/MM model - polarizable embedding model - is provided in the
+<a class="reference internal" href="solvent.html#module-solvent" title="solvent: Solvation models and solvent effects"><code class="xref py py-mod docutils literal notranslate"><span class="pre">solvent</span></code></a> module. See <a class="reference internal" href="solvent.html#user-solvent"><span class="std std-ref">Solvation models</span></a> for details.</p>
+</div>
+<div class="section" id="scf-methods-with-mm-charges">
+<h2><span class="section-number">4.13.2. </span>SCF methods with MM charges<a class="headerlink" href="#scf-methods-with-mm-charges" title="Permalink to this headline">¶</a></h2>
+<p>MM background charges support SCF methods
+<code class="xref py py-func docutils literal notranslate"><span class="pre">scf.RHF()</span></code>, <code class="xref py py-func docutils literal notranslate"><span class="pre">scf.UHF()</span></code>, <code class="xref py py-func docutils literal notranslate"><span class="pre">scf.ROHF()</span></code>,
+<code class="xref py py-func docutils literal notranslate"><span class="pre">scf.RKS()</span></code>, <code class="xref py py-func docutils literal notranslate"><span class="pre">scf.UKS()</span></code> and <code class="xref py py-func docutils literal notranslate"><span class="pre">scf.ROKS()</span></code>,
+by decorating the underlying SCF objects with <code class="xref py py-func docutils literal notranslate"><span class="pre">qmmm.mm_charge()</span></code>.
+A minimal example of using the <code class="xref py py-mod docutils literal notranslate"><span class="pre">qmmm</span></code> module is as follows.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pyscf</span> <span class="kn">import</span> <span class="n">gto</span><span class="p">,</span> <span class="n">scf</span><span class="p">,</span> <span class="n">qmmm</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mol</span> <span class="o">=</span> <span class="n">gto</span><span class="o">.</span><span class="n">M</span><span class="p">(</span><span class="n">atom</span><span class="o">=</span><span class="s1">&#39;H 0 0 0; F 0 0 1&#39;</span><span class="p">,</span> <span class="n">basis</span><span class="o">=</span><span class="s1">&#39;ccpvdz&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">coords</span> <span class="o">=</span> <span class="p">[(</span><span class="mf">0.5</span><span class="p">,</span><span class="mf">0.6</span><span class="p">,</span><span class="mf">0.8</span><span class="p">)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">charges</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mf">0.3</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mf</span> <span class="o">=</span> <span class="n">qmmm</span><span class="o">.</span><span class="n">mm_charge</span><span class="p">(</span><span class="n">scf</span><span class="o">.</span><span class="n">RHF</span><span class="p">(</span><span class="n">mol</span><span class="p">),</span> <span class="n">coords</span><span class="p">,</span> <span class="n">charges</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mf</span><span class="o">.</span><span class="n">kernel</span><span class="p">()</span>
+<span class="go">converged SCF energy = -100.045455504517</span>
+</pre></div>
+</div>
+<p>In the above example, the coordinates (in the same unit as <code class="docutils literal notranslate"><span class="pre">mol.unit</span></code>) and
+charges of the point charges in the MM region are given by <code class="docutils literal notranslate"><span class="pre">coords</span></code> and <code class="docutils literal notranslate"><span class="pre">charges</span></code>,
+respectively.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Currently, MM charges do not support <code class="xref py py-func docutils literal notranslate"><span class="pre">scf.GHF()</span></code> and <code class="xref py py-func docutils literal notranslate"><span class="pre">scf.GKS()</span></code>.</p>
+</div>
+<p>Analytical nuclear gradients are calculated with the background charges.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mf</span><span class="o">.</span><span class="n">nuc_grad_method</span><span class="p">()</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+<span class="go">--------------- QMMM gradients ---------------</span>
+<span class="go">     x                y                z</span>
+<span class="go">0 H    -0.0157686538    -0.0189223846    -0.1102601870</span>
+<span class="go">1 F    -0.0830715173    -0.0996858207     0.1182587572</span>
+<span class="go">----------------------------------------------</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The gradients obtained from</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pyscf</span> <span class="kn">import</span> <span class="n">grad</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">grad</span><span class="o">.</span><span class="n">RHF</span><span class="p">(</span><span class="n">mf</span><span class="p">)</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>for a <code class="xref py py-func docutils literal notranslate"><span class="pre">qmmm.mm_charge()</span></code> decorated <code class="docutils literal notranslate"><span class="pre">mf</span></code> object
+will be missing the contributions from the background charges.</p>
+</div>
+<p>If MM charges and X2C correction are used together, function
+<code class="xref py py-func docutils literal notranslate"><span class="pre">qmmm.mm_charge()</span></code> needs to be applied after X2C decoration.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">qmmm</span><span class="o">.</span><span class="n">mm_charge</span><span class="p">(</span><span class="n">scf</span><span class="o">.</span><span class="n">RHF</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span><span class="o">.</span><span class="n">x2c</span><span class="p">(),</span> <span class="n">coords</span><span class="p">,</span> <span class="n">charges</span><span class="p">)</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+<span class="go">converged SCF energy = -100.126131355203</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">qmmm</span><span class="o">.</span><span class="n">mm_charge</span><span class="p">(</span><span class="n">scf</span><span class="o">.</span><span class="n">RHF</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span><span class="o">.</span><span class="n">x2c1e</span><span class="p">(),</span> <span class="n">coords</span><span class="p">,</span> <span class="n">charges</span><span class="p">)</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+<span class="go">converged SCF energy = -100.126131355203</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">qmmm</span><span class="o">.</span><span class="n">mm_charge</span><span class="p">(</span><span class="n">scf</span><span class="o">.</span><span class="n">RHF</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span><span class="o">.</span><span class="n">sfx2c1e</span><span class="p">(),</span> <span class="n">coords</span><span class="p">,</span> <span class="n">charges</span><span class="p">)</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+<span class="go">converged SCF energy = -100.126131355203</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>X2C gradients with MM charges are not supported.</p>
+</div>
+<p>MM charges can also be used together with second order scf and solvation models.</p>
+</div>
+<div class="section" id="post-scf-methods-with-mm-charges">
+<h2><span class="section-number">4.13.3. </span>Post-SCF methods with MM charges<a class="headerlink" href="#post-scf-methods-with-mm-charges" title="Permalink to this headline">¶</a></h2>
+<p>Once function <code class="xref py py-func docutils literal notranslate"><span class="pre">qmmm.mm_charge()</span></code> is
+applied on the SCF object, it affects all the
+post-HF calculations, eg. MP2, CCSD, MCSCF, etc.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pyscf</span> <span class="kn">import</span> <span class="n">mcscf</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mf</span> <span class="o">=</span> <span class="n">qmmm</span><span class="o">.</span><span class="n">mm_charge</span><span class="p">(</span><span class="n">scf</span><span class="o">.</span><span class="n">RHF</span><span class="p">(</span><span class="n">mol</span><span class="p">),</span> <span class="n">coords</span><span class="p">,</span> <span class="n">charges</span><span class="p">)</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mc</span> <span class="o">=</span> <span class="n">mcscf</span><span class="o">.</span><span class="n">CASSCF</span><span class="p">(</span><span class="n">mf</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mc</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">conv_tol</span><span class="o">=</span><span class="mf">1E-10</span><span class="p">)</span>
+<span class="go">CASSCF energy = -100.101848457578</span>
+<span class="go">CASCI E = -100.101848457578  E(CI) = -6.74400107375546  S^2 = 0.0000000</span>
+</pre></div>
+</div>
+</div>
 </div>
 
 
@@ -196,8 +302,8 @@
           </div>
           <footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="x2c.html" class="btn btn-neutral float-right" title="4.15. Relativistic calculations" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
-        <a href="solvent.html" class="btn btn-neutral float-left" title="4.13. Solvation models" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="x2c.html" class="btn btn-neutral float-right" title="4.14. Relativistic calculations" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="solvent.html" class="btn btn-neutral float-left" title="4.12. Solvation models" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 
   <hr/>

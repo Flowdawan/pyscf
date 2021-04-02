@@ -89,7 +89,7 @@
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../overview.html">1. An overview of PySCF</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../install.html">2. Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../tutorial.html">3. Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../quickstart.html">3. Quickstart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../user.html">4. User guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../develop.html">5. Developer documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../modules.html">6. API documentation</a></li>
@@ -186,6 +186,7 @@
 <span class="sd">&#39;&#39;&#39;</span>
 
 <span class="kn">from</span> <span class="nn">pyscf</span> <span class="kn">import</span> <span class="n">scf</span>
+<span class="kn">from</span> <span class="nn">pyscf</span> <span class="kn">import</span> <span class="n">lib</span>
 <span class="kn">from</span> <span class="nn">pyscf.adc</span> <span class="kn">import</span> <span class="n">uadc</span>
 <span class="kn">from</span> <span class="nn">pyscf.adc</span> <span class="kn">import</span> <span class="n">radc</span>
 
@@ -193,17 +194,19 @@
     <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">frozen</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">frozen</span> <span class="o">==</span> <span class="mi">0</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span>
 
-    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">mf</span><span class="p">,</span> <span class="n">scf</span><span class="o">.</span><span class="n">rhf</span><span class="o">.</span><span class="n">RHF</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">mf</span><span class="p">,</span> <span class="n">scf</span><span class="o">.</span><span class="n">uhf</span><span class="o">.</span><span class="n">UHF</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">UADC</span><span class="p">(</span><span class="n">mf</span><span class="p">,</span> <span class="n">frozen</span><span class="p">,</span> <span class="n">mo_coeff</span><span class="p">,</span> <span class="n">mo_occ</span><span class="p">)</span>
+    <span class="c1">#elif isinstance(mf, scf.rohf.ROHF):</span>
+    <span class="c1">#    lib.logger.warn(mf, &#39;RADC method does not support ROHF reference. ROHF object &#39;</span>
+    <span class="c1">#                    &#39;is converted to UHF object and UADC method is called.&#39;)</span>
+    <span class="c1">#    mf = scf.addons.convert_to_uhf(mf)</span>
+    <span class="c1">#    return UADC(mf, frozen, mo_coeff, mo_occ)</span>
+    <span class="c1"># TODO add ROHF functionality</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">mf</span><span class="p">,</span> <span class="n">scf</span><span class="o">.</span><span class="n">rhf</span><span class="o">.</span><span class="n">RHF</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">RADC</span><span class="p">(</span><span class="n">mf</span><span class="p">,</span> <span class="n">frozen</span><span class="p">,</span> <span class="n">mo_coeff</span><span class="p">,</span> <span class="n">mo_occ</span><span class="p">)</span>
-    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">mf</span><span class="p">,</span> <span class="n">scf</span><span class="o">.</span><span class="n">uhf</span><span class="o">.</span><span class="n">UHF</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">UADC</span><span class="p">(</span><span class="n">mf</span><span class="p">,</span> <span class="n">frozen</span><span class="p">,</span> <span class="n">mo_coeff</span><span class="p">,</span> <span class="n">mo_occ</span><span class="p">)</span>
-    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">mf</span><span class="p">,</span> <span class="n">scf</span><span class="o">.</span><span class="n">rhf</span><span class="o">.</span><span class="n">ROHF</span><span class="p">):</span>
-        <span class="n">lib</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="n">mf</span><span class="p">,</span> <span class="s1">&#39;RADC method does not support ROHF reference. ROHF object &#39;</span>
-                        <span class="s1">&#39;is converted to UHF object and UADC method is called.&#39;</span><span class="p">)</span>
-        <span class="n">mf</span> <span class="o">=</span> <span class="n">scf</span><span class="o">.</span><span class="n">addons</span><span class="o">.</span><span class="n">convert_to_uhf</span><span class="p">(</span><span class="n">mf</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">UADC</span><span class="p">(</span><span class="n">mf</span><span class="p">,</span> <span class="n">frozen</span><span class="p">,</span> <span class="n">mo_coeff</span><span class="p">,</span> <span class="n">mo_occ</span><span class="p">)</span>
     <span class="k">else</span> <span class="p">:</span>
         <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;ADC code only supports RHF, ROHF, and UHF references&#39;</span><span class="p">)</span></div>
+
 
 <span class="n">ADC</span><span class="o">.</span><span class="vm">__doc__</span> <span class="o">=</span> <span class="n">uadc</span><span class="o">.</span><span class="n">UADC</span><span class="o">.</span><span class="vm">__doc__</span>
 

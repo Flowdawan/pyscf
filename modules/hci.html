@@ -92,7 +92,7 @@
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../overview.html">1. An overview of PySCF</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../install.html">2. Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../tutorial.html">3. Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quickstart.html">3. Quickstart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../user.html">4. User guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../develop.html">5. Developer documentation</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../modules.html">6. API documentation</a><ul class="current">
@@ -215,32 +215,6 @@
 of the Heat-bath selected CI algorithm, where selection is done based
 on strings rather than determinants.
 For example:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env python</span>
-<span class="c1">#</span>
-<span class="c1"># Author: Qiming Sun &lt;osirpt.sun@gmail.com&gt;</span>
-<span class="c1">#</span>
-
-<span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">A simple example to run heat-bath selected CI</span>
-<span class="sd">&#39;&#39;&#39;</span>
-
-<span class="kn">from</span> <span class="nn">pyscf</span> <span class="kn">import</span> <span class="n">gto</span><span class="p">,</span> <span class="n">scf</span><span class="p">,</span> <span class="n">ao2mo</span><span class="p">,</span> <span class="n">hci</span>
-
-<span class="n">mol</span> <span class="o">=</span> <span class="n">gto</span><span class="o">.</span><span class="n">M</span><span class="p">(</span>
-    <span class="n">atom</span> <span class="o">=</span> <span class="s1">&#39;H 0 0 0; F 0 0 1.1&#39;</span><span class="p">,</span>
-    <span class="n">basis</span> <span class="o">=</span> <span class="s1">&#39;6-31g&#39;</span><span class="p">,</span>
-<span class="p">)</span>
-<span class="n">myhf</span> <span class="o">=</span> <span class="n">scf</span><span class="o">.</span><span class="n">RHF</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
-
-<span class="n">cisolver</span> <span class="o">=</span> <span class="n">hci</span><span class="o">.</span><span class="n">SCI</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
-<span class="n">nmo</span> <span class="o">=</span> <span class="n">myhf</span><span class="o">.</span><span class="n">mo_coeff</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-<span class="n">nelec</span> <span class="o">=</span> <span class="n">mol</span><span class="o">.</span><span class="n">nelec</span>
-<span class="n">h1</span> <span class="o">=</span> <span class="n">myhf</span><span class="o">.</span><span class="n">mo_coeff</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">myhf</span><span class="o">.</span><span class="n">get_hcore</span><span class="p">())</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">myhf</span><span class="o">.</span><span class="n">mo_coeff</span><span class="p">)</span>
-<span class="n">h2</span> <span class="o">=</span> <span class="n">ao2mo</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span> <span class="n">myhf</span><span class="o">.</span><span class="n">mo_coeff</span><span class="p">)</span>
-<span class="n">e</span><span class="p">,</span> <span class="n">civec</span> <span class="o">=</span> <span class="n">cisolver</span><span class="o">.</span><span class="n">kernel</span><span class="p">(</span><span class="n">h1</span><span class="p">,</span> <span class="n">h2</span><span class="p">,</span> <span class="n">nmo</span><span class="p">,</span> <span class="n">nelec</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
-
-</pre></div>
-</div>
 <p>See also <code class="xref py py-mod docutils literal notranslate"><span class="pre">cornell_shci</span></code>.</p>
 <div class="section" id="examples">
 <h2><span class="section-number">6.14.1. </span>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>

@@ -89,7 +89,7 @@
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../overview.html">1. An overview of PySCF</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../install.html">2. Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../tutorial.html">3. Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../quickstart.html">3. Quickstart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../user.html">4. User guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../develop.html">5. Developer documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../modules.html">6. API documentation</a></li>
@@ -192,6 +192,7 @@
 <span class="kn">from</span> <span class="nn">pyscf</span> <span class="kn">import</span> <span class="n">scf</span>
 <span class="kn">from</span> <span class="nn">pyscf</span> <span class="kn">import</span> <span class="n">__config__</span>
 <span class="kn">from</span> <span class="nn">pyscf.lo.orth</span> <span class="kn">import</span> <span class="n">vec_lowdin</span>
+<span class="kn">from</span> <span class="nn">pyscf.data.elements</span> <span class="kn">import</span> <span class="n">is_ghost_atom</span>
 
 <span class="c1"># Alternately, use ANO for minao</span>
 <span class="c1"># orthogonalize iao with coefficients obtained by</span>
@@ -272,6 +273,13 @@
 <div class="viewcode-block" id="reference_mol"><a class="viewcode-back" href="../../../modules/lo.html#pyscf.lo.iao.reference_mol">[docs]</a><span class="k">def</span> <span class="nf">reference_mol</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span> <span class="n">minao</span><span class="o">=</span><span class="n">MINAO</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;Create a molecule which uses reference minimal basis&#39;&#39;&#39;</span>
     <span class="n">pmol</span> <span class="o">=</span> <span class="n">mol</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">atoms</span> <span class="o">=</span> <span class="p">[</span><span class="n">atom</span> <span class="k">for</span> <span class="n">atom</span> <span class="ow">in</span> <span class="n">gto</span><span class="o">.</span><span class="n">format_atom</span><span class="p">(</span><span class="n">pmol</span><span class="o">.</span><span class="n">atom</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="mi">1</span><span class="p">)]</span>
+    <span class="c1"># remove ghost atoms</span>
+    <span class="n">pmol</span><span class="o">.</span><span class="n">atom</span> <span class="o">=</span> <span class="p">[</span><span class="n">atom</span> <span class="k">for</span> <span class="n">atom</span> <span class="ow">in</span> <span class="n">atoms</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">is_ghost_atom</span><span class="p">(</span><span class="n">atom</span><span class="p">[</span><span class="mi">0</span><span class="p">])]</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">pmol</span><span class="o">.</span><span class="n">atom</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">atoms</span><span class="p">):</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span> <span class="s1">&#39;Ghost atoms found in system. &#39;</span>
+                    <span class="s1">&#39;Current IAO does not support ghost atoms. &#39;</span>
+                    <span class="s1">&#39;They are removed from IAO reference basis.&#39;</span><span class="p">)</span>
     <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">pmol</span><span class="p">,</span> <span class="s1">&#39;rcut&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">pmol</span><span class="o">.</span><span class="n">rcut</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">pmol</span><span class="o">.</span><span class="n">build</span><span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="n">basis</span><span class="o">=</span><span class="n">minao</span><span class="p">)</span>

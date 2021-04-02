@@ -92,7 +92,7 @@
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../overview.html">1. An overview of PySCF</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../install.html">2. Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../tutorial.html">3. Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quickstart.html">3. Quickstart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../user.html">4. User guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../develop.html">5. Developer documentation</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../modules.html">6. API documentation</a><ul class="current">
@@ -111,7 +111,7 @@
 <li class="toctree-l2 current"><a class="current reference internal" href="#">6.13. <code class="xref py py-mod docutils literal notranslate"><span class="pre">gw</span></code> — Molecular G0W0</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#examples">6.13.1. Examples</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#module-pyscf.gw">6.13.2. Program reference</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#module-pyscf.gw.gw">6.13.2.1. G0W0 approximation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#g0w0-approximation">6.13.2.1. G0W0 approximation</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-pyscf.gw.gw_slow">6.13.2.2. Slow version</a></li>
 </ul>
 </li>
@@ -222,52 +222,9 @@ implementation for eigenvalues.</p>
 </div>
 <div class="section" id="module-pyscf.gw">
 <span id="program-reference"></span><h2><span class="section-number">6.13.2. </span>Program reference<a class="headerlink" href="#module-pyscf.gw" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="module-pyscf.gw.gw">
-<span id="g0w0-approximation"></span><h3><span class="section-number">6.13.2.1. </span>G0W0 approximation<a class="headerlink" href="#module-pyscf.gw.gw" title="Permalink to this headline">¶</a></h3>
 <p>G0W0 approximation</p>
-<dl class="py class">
-<dt id="pyscf.gw.gw.GW">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pyscf.gw.gw.</span></code><code class="sig-name descname"><span class="pre">GW</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tdmf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frozen</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyscf/gw/gw.html#GW"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyscf.gw.gw.GW" title="Permalink to this definition">¶</a></dt>
-<dd><p>non-relativistic restricted GW</p>
-<p>Saved results</p>
-<blockquote>
-<div><dl class="simple">
-<dt>mo_energy :</dt><dd><p>Orbital energies</p>
-</dd>
-<dt>mo_coeff</dt><dd><p>Orbital coefficients</p>
-</dd>
-</dl>
-</div></blockquote>
-<dl class="py method">
-<dt id="pyscf.gw.gw.GW.get_frozen_mask">
-<code class="sig-name descname"><span class="pre">get_frozen_mask</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyscf.gw.gw.GW.get_frozen_mask" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get boolean mask for the restricted reference orbitals.</p>
-<p>In the returned boolean (mask) array of frozen orbital indices, the
-element is False if it corresonds to the frozen orbital.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="pyscf.gw.gw.GW.kernel">
-<code class="sig-name descname"><span class="pre">kernel</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mo_energy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mo_coeff</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">td_e</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">td_xy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eris</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">orbs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyscf/gw/gw.html#GW.kernel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyscf.gw.gw.GW.kernel" title="Permalink to this definition">¶</a></dt>
-<dd><p>Kernel function is the main driver of a method.  Every method should
-define the kernel function as the entry of the calculation.  Note the
-return value of kernel function is not strictly defined.  It can be
-anything related to the method (such as the energy, the wave-function,
-the DFT mesh grids etc.).</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py function">
-<dt id="pyscf.gw.gw.kernel">
-<code class="sig-prename descclassname"><span class="pre">pyscf.gw.gw.</span></code><code class="sig-name descname"><span class="pre">kernel</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gw</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mo_energy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mo_coeff</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">td_e</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">td_xy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eris</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">orbs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyscf/gw/gw.html#kernel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyscf.gw.gw.kernel" title="Permalink to this definition">¶</a></dt>
-<dd><p>GW-corrected quasiparticle orbital energies</p>
-<dl class="simple">
-<dt>Returns:</dt><dd><p>A list :  converged, mo_energy, mo_coeff</p>
-</dd>
-</dl>
-</dd></dl>
-
+<div class="section" id="g0w0-approximation">
+<h3><span class="section-number">6.13.2.1. </span>G0W0 approximation<a class="headerlink" href="#g0w0-approximation" title="Permalink to this headline">¶</a></h3>
 </div>
 <div class="section" id="module-pyscf.gw.gw_slow">
 <span id="slow-version"></span><h3><span class="section-number">6.13.2.2. </span>Slow version<a class="headerlink" href="#module-pyscf.gw.gw_slow" title="Permalink to this headline">¶</a></h3>

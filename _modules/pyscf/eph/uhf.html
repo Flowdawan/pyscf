@@ -89,7 +89,7 @@
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../overview.html">1. An overview of PySCF</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../install.html">2. Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../tutorial.html">3. Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../quickstart.html">3. Quickstart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../user.html">4. User guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../develop.html">5. Developer documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../modules.html">6. API documentation</a></li>
@@ -182,11 +182,15 @@
 <span class="sd">Analytical electron-phonon matrix for unrestricted hartree fock</span>
 <span class="sd">&#39;&#39;&#39;</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">pyscf</span> <span class="kn">import</span> <span class="n">lib</span>
 <span class="kn">from</span> <span class="nn">pyscf.eph</span> <span class="kn">import</span> <span class="n">rhf</span> <span class="k">as</span> <span class="n">rhf_eph</span>
 <span class="kn">from</span> <span class="nn">pyscf.hessian</span> <span class="kn">import</span> <span class="n">uhf</span> <span class="k">as</span> <span class="n">uhf_hess</span>
 <span class="kn">from</span> <span class="nn">pyscf.hessian</span> <span class="kn">import</span> <span class="n">rhf</span> <span class="k">as</span> <span class="n">rhf_hess</span>
 <span class="kn">from</span> <span class="nn">pyscf.scf._response_functions</span> <span class="kn">import</span> <span class="n">_gen_uhf_response</span>
-<span class="kn">from</span> <span class="nn">pyscf</span> <span class="kn">import</span> <span class="n">lib</span>
+<span class="kn">from</span> <span class="nn">pyscf.data.nist</span> <span class="kn">import</span> <span class="n">MP_ME</span>
+
+<span class="n">CUTOFF_FREQUENCY</span> <span class="o">=</span> <span class="n">rhf_eph</span><span class="o">.</span><span class="n">CUTOFF_FREQUENCY</span>
+<span class="n">KEEP_IMAG_FREQUENCY</span> <span class="o">=</span> <span class="n">rhf_eph</span><span class="o">.</span><span class="n">KEEP_IMAG_FREQUENCY</span>
 
 <span class="k">def</span> <span class="nf">uhf_deriv_generator</span><span class="p">(</span><span class="n">mf</span><span class="p">,</span> <span class="n">mo_coeff</span><span class="p">,</span> <span class="n">mo_occ</span><span class="p">):</span>
     <span class="n">nao</span><span class="p">,</span> <span class="n">nmoa</span> <span class="o">=</span> <span class="n">mo_coeff</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span>
@@ -257,13 +261,8 @@
     <span class="n">vcorea</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">vcorea</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">nao</span><span class="p">,</span><span class="n">nao</span><span class="p">)</span>
     <span class="n">vcoreb</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">vcoreb</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">nao</span><span class="p">,</span><span class="n">nao</span><span class="p">)</span>
 
-    <span class="n">mass</span> <span class="o">=</span> <span class="n">mol</span><span class="o">.</span><span class="n">atom_mass_list</span><span class="p">()</span> <span class="o">*</span> <span class="mf">1836.15</span>
-    <span class="n">nmodes</span><span class="p">,</span> <span class="n">natoms</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">omega</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">mass</span><span class="p">)</span>
-    <span class="n">vec</span> <span class="o">=</span> <span class="n">vec</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">natoms</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">nmodes</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">natoms</span><span class="p">):</span>
-        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nmodes</span><span class="p">):</span>
-            <span class="n">vec</span><span class="p">[</span><span class="n">i</span><span class="p">,:,</span><span class="n">j</span><span class="p">]</span> <span class="o">/=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">mass</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">*</span><span class="n">omega</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>
-    <span class="n">vec</span> <span class="o">=</span> <span class="n">vec</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">3</span><span class="o">*</span><span class="n">natoms</span><span class="p">,</span><span class="n">nmodes</span><span class="p">)</span>
+    <span class="n">mass</span> <span class="o">=</span> <span class="n">mol</span><span class="o">.</span><span class="n">atom_mass_list</span><span class="p">()</span> <span class="o">*</span> <span class="n">MP_ME</span>
+    <span class="n">vec</span> <span class="o">=</span> <span class="n">rhf_eph</span><span class="o">.</span><span class="n">_freq_mass_weighted_vec</span><span class="p">(</span><span class="n">vec</span><span class="p">,</span> <span class="n">omega</span><span class="p">,</span> <span class="n">mass</span><span class="p">)</span>
     <span class="n">mata</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s1">&#39;xJ,xuv-&gt;Juv&#39;</span><span class="p">,</span> <span class="n">vec</span><span class="p">,</span> <span class="n">vcorea</span><span class="p">)</span>
     <span class="n">matb</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s1">&#39;xJ,xuv-&gt;Juv&#39;</span><span class="p">,</span> <span class="n">vec</span><span class="p">,</span> <span class="n">vcoreb</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">mo_rep</span><span class="p">:</span>
@@ -273,9 +272,29 @@
 
 
 <div class="viewcode-block" id="EPH"><a class="viewcode-back" href="../../../modules/eph.html#pyscf.eph.uhf.EPH">[docs]</a><span class="k">class</span> <span class="nc">EPH</span><span class="p">(</span><span class="n">uhf_hess</span><span class="o">.</span><span class="n">Hessian</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scf_method</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;EPH for unrestricted Hartree Fock</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        cutoff_frequency : float or int</span>
+<span class="sd">            cutoff frequency in cm-1. Default is 80</span>
+<span class="sd">        keep_imag_frequency : bool</span>
+<span class="sd">            Whether to keep imaginary frequencies in the output.  Default is False</span>
+
+<span class="sd">    Saved results</span>
+
+<span class="sd">        omega : numpy.ndarray</span>
+<span class="sd">            Vibrational frequencies in au.</span>
+<span class="sd">        vec : numpy.ndarray</span>
+<span class="sd">            Polarization vectors of the vibration modes</span>
+<span class="sd">        eph : numpy.ndarray</span>
+<span class="sd">            Electron phonon matrix eph[spin,j,a,b] (j in nmodes, a,b in norbs)</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scf_method</span><span class="p">,</span> <span class="n">cutoff_frequency</span><span class="o">=</span><span class="n">CUTOFF_FREQUENCY</span><span class="p">,</span>
+                 <span class="n">keep_imag_frequency</span><span class="o">=</span><span class="n">KEEP_IMAG_FREQUENCY</span><span class="p">):</span>
         <span class="n">uhf_hess</span><span class="o">.</span><span class="n">Hessian</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scf_method</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">CUTOFF_FREQUENCY</span><span class="o">=</span><span class="mi">80</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cutoff_frequency</span> <span class="o">=</span> <span class="n">cutoff_frequency</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">keep_imag_frequency</span> <span class="o">=</span> <span class="n">keep_imag_frequency</span>
 
     <span class="n">get_mode</span> <span class="o">=</span> <span class="n">rhf_eph</span><span class="o">.</span><span class="n">get_mode</span>
     <span class="n">get_eph</span> <span class="o">=</span> <span class="n">get_eph</span>

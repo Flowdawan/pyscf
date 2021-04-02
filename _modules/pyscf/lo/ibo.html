@@ -89,7 +89,7 @@
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../overview.html">1. An overview of PySCF</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../install.html">2. Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../tutorial.html">3. Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../quickstart.html">3. Quickstart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../user.html">4. User guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../develop.html">5. Developer documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../modules.html">6. API documentation</a></li>
@@ -196,7 +196,10 @@
 <span class="kn">from</span> <span class="nn">pyscf.lo</span> <span class="kn">import</span> <span class="n">orth</span><span class="p">,</span> <span class="n">pipek</span>
 <span class="kn">from</span> <span class="nn">pyscf</span> <span class="kn">import</span> <span class="n">__config__</span>
 
-<div class="viewcode-block" id="ibo"><a class="viewcode-back" href="../../../modules/lo.html#pyscf.lo.ibo.ibo">[docs]</a><span class="k">def</span> <span class="nf">ibo</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span> <span class="n">orbocc</span><span class="p">,</span> <span class="n">locmethod</span><span class="o">=</span><span class="s1">&#39;IBO&#39;</span><span class="p">,</span> <span class="n">iaos</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">exponent</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">grad_tol</span><span class="o">=</span><span class="mf">1e-8</span><span class="p">,</span> <span class="n">max_iter</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">logger</span><span class="o">.</span><span class="n">NOTE</span><span class="p">):</span>
+<span class="n">MINAO</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">__config__</span><span class="p">,</span> <span class="s1">&#39;lo_iao_minao&#39;</span><span class="p">,</span> <span class="s1">&#39;minao&#39;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="ibo"><a class="viewcode-back" href="../../../modules/lo.html#pyscf.lo.ibo.ibo">[docs]</a><span class="k">def</span> <span class="nf">ibo</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span> <span class="n">orbocc</span><span class="p">,</span> <span class="n">locmethod</span><span class="o">=</span><span class="s1">&#39;IBO&#39;</span><span class="p">,</span> <span class="n">iaos</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">exponent</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">grad_tol</span><span class="o">=</span><span class="mf">1e-8</span><span class="p">,</span> <span class="n">max_iter</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">minao</span><span class="o">=</span><span class="n">MINAO</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">logger</span><span class="o">.</span><span class="n">NOTE</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;Intrinsic Bonding Orbitals</span>
 
 <span class="sd">    This function serves as a wrapper to the underlying localization functions</span>
@@ -236,14 +239,16 @@
     <span class="n">locmethod</span> <span class="o">=</span> <span class="n">locmethod</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
     <span class="k">if</span> <span class="n">locmethod</span> <span class="o">==</span> <span class="s1">&#39;PM&#39;</span><span class="p">:</span>
         <span class="n">EXPONENT</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">__config__</span><span class="p">,</span> <span class="s1">&#39;lo_ibo_PipekMezey_exponent&#39;</span><span class="p">,</span> <span class="n">exponent</span><span class="p">)</span>
-        <span class="n">ibos</span> <span class="o">=</span> <span class="n">PipekMezey</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span> <span class="n">orbocc</span><span class="p">,</span> <span class="n">iaos</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">exponent</span><span class="o">=</span><span class="n">EXPONENT</span><span class="p">)</span>
+        <span class="n">ibos</span> <span class="o">=</span> <span class="n">PipekMezey</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span> <span class="n">orbocc</span><span class="p">,</span> <span class="n">iaos</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">exponent</span><span class="o">=</span><span class="n">EXPONENT</span><span class="p">,</span> <span class="n">minao</span><span class="o">=</span><span class="n">minao</span><span class="p">)</span>
         <span class="k">del</span><span class="p">(</span><span class="n">EXPONENT</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">ibos</span> <span class="o">=</span> <span class="n">ibo_loc</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span> <span class="n">orbocc</span><span class="p">,</span> <span class="n">iaos</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">exponent</span><span class="o">=</span><span class="n">exponent</span><span class="p">,</span> <span class="n">grad_tol</span><span class="o">=</span><span class="n">grad_tol</span><span class="p">,</span> <span class="n">max_iter</span><span class="o">=</span><span class="n">max_iter</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
+        <span class="n">ibos</span> <span class="o">=</span> <span class="n">ibo_loc</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span> <span class="n">orbocc</span><span class="p">,</span> <span class="n">iaos</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">exponent</span><span class="o">=</span><span class="n">exponent</span><span class="p">,</span> \
+                       <span class="n">grad_tol</span><span class="o">=</span><span class="n">grad_tol</span><span class="p">,</span> <span class="n">max_iter</span><span class="o">=</span><span class="n">max_iter</span><span class="p">,</span> \
+                       <span class="n">minao</span><span class="o">=</span><span class="n">minao</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">ibos</span></div>
 
 <div class="viewcode-block" id="ibo_loc"><a class="viewcode-back" href="../../../modules/lo.html#pyscf.lo.ibo.ibo_loc">[docs]</a><span class="k">def</span> <span class="nf">ibo_loc</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span> <span class="n">orbocc</span><span class="p">,</span> <span class="n">iaos</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">exponent</span><span class="p">,</span> <span class="n">grad_tol</span><span class="p">,</span> <span class="n">max_iter</span><span class="p">,</span>
-            <span class="n">verbose</span><span class="o">=</span><span class="n">logger</span><span class="o">.</span><span class="n">NOTE</span><span class="p">):</span>
+            <span class="n">minao</span><span class="o">=</span><span class="n">MINAO</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">logger</span><span class="o">.</span><span class="n">NOTE</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;Intrinsic Bonding Orbitals. [Ref. JCTC, 9, 4834]</span>
 
 <span class="sd">    This implementation follows Knizia&#39;s implementation execept that the</span>
@@ -288,7 +293,9 @@
     <span class="c1">#dynamic variables</span>
     <span class="n">Converged</span> <span class="o">=</span> <span class="kc">False</span>
 
-    <span class="n">Atoms</span>  <span class="o">=</span> <span class="p">[</span><span class="n">mol</span><span class="o">.</span><span class="n">atom_symbol</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">mol</span><span class="o">.</span><span class="n">natm</span><span class="p">)]</span>
+    <span class="c1"># render Atoms list without ghost atoms</span>
+    <span class="n">iao_mol</span> <span class="o">=</span> <span class="n">iao</span><span class="o">.</span><span class="n">reference_mol</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span> <span class="n">minao</span><span class="o">=</span><span class="n">minao</span><span class="p">)</span>
+    <span class="n">Atoms</span> <span class="o">=</span> <span class="p">[</span><span class="n">iao_mol</span><span class="o">.</span><span class="n">atom_pure_symbol</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">iao_mol</span><span class="o">.</span><span class="n">natm</span><span class="p">)]</span>
 
     <span class="c1">#generates the parameters we need about the atomic structure</span>
     <span class="n">nAtoms</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">Atoms</span><span class="p">)</span>
@@ -370,7 +377,7 @@
     <span class="k">return</span> <span class="n">numpy</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">iaos</span><span class="p">,</span> <span class="p">(</span><span class="n">orth</span><span class="o">.</span><span class="n">vec_lowdin</span><span class="p">(</span><span class="n">CIb</span><span class="p">)))</span></div>
 
 
-<div class="viewcode-block" id="PipekMezey"><a class="viewcode-back" href="../../../modules/lo.html#pyscf.lo.ibo.PipekMezey">[docs]</a><span class="k">def</span> <span class="nf">PipekMezey</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span> <span class="n">orbocc</span><span class="p">,</span> <span class="n">iaos</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">exponent</span><span class="p">):</span>
+<div class="viewcode-block" id="PipekMezey"><a class="viewcode-back" href="../../../modules/lo.html#pyscf.lo.ibo.PipekMezey">[docs]</a><span class="k">def</span> <span class="nf">PipekMezey</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span> <span class="n">orbocc</span><span class="p">,</span> <span class="n">iaos</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">exponent</span><span class="p">,</span> <span class="n">minao</span><span class="o">=</span><span class="n">MINAO</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Note this localization is slightly different to Knizia&#39;s implementation.</span>
 <span class="sd">    The localization here reserves orthogonormality during optimization.</span>
@@ -393,11 +400,10 @@
     <span class="c1"># Note: PM with Lowdin-orth IAOs is implemented in pipek.PM class</span>
     <span class="c1"># TODO: Merge the implemenation here to pipek.PM</span>
 
-    <span class="n">MINAO</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">__config__</span><span class="p">,</span> <span class="s1">&#39;lo_iao_minao&#39;</span><span class="p">,</span> <span class="s1">&#39;minao&#39;</span><span class="p">)</span>
     <span class="n">cs</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">iaos</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">conj</span><span class="p">(),</span> <span class="n">s</span><span class="p">)</span>
     <span class="n">s_iao</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">cs</span><span class="p">,</span> <span class="n">iaos</span><span class="p">)</span>
     <span class="n">iao_inv</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">s_iao</span><span class="p">,</span> <span class="n">cs</span><span class="p">)</span>
-    <span class="n">iao_mol</span> <span class="o">=</span> <span class="n">iao</span><span class="o">.</span><span class="n">reference_mol</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span> <span class="n">minao</span><span class="o">=</span><span class="n">MINAO</span><span class="p">)</span>
+    <span class="n">iao_mol</span> <span class="o">=</span> <span class="n">iao</span><span class="o">.</span><span class="n">reference_mol</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span> <span class="n">minao</span><span class="o">=</span><span class="n">minao</span><span class="p">)</span>
 
     <span class="c1"># Define the mulliken population of each atom based on IAO basis.</span>
     <span class="c1"># proj[i].trace is the mulliken population of atom i.</span>
@@ -562,6 +568,7 @@
         <span class="n">iBfAt</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">iBfAt</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">nAoX</span><span class="p">[</span><span class="n">Atom</span><span class="p">])</span>
     <span class="k">return</span> <span class="n">iBfAt</span><span class="p">,</span> <span class="n">nCoreX</span><span class="p">,</span> <span class="n">nAoX</span><span class="p">,</span> <span class="n">AoLabels</span></div>
 
+<span class="k">del</span><span class="p">(</span><span class="n">MINAO</span><span class="p">)</span>
 </pre></div>
 
            </div>

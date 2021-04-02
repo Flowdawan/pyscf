@@ -89,7 +89,7 @@
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../overview.html">1. An overview of PySCF</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../install.html">2. Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../tutorial.html">3. Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../quickstart.html">3. Quickstart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../user.html">4. User guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../develop.html">5. Developer documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../modules.html">6. API documentation</a></li>
@@ -183,6 +183,7 @@
 <span class="kn">import</span> <span class="nn">scipy.linalg</span>
 <span class="kn">from</span> <span class="nn">pyscf</span> <span class="kn">import</span> <span class="n">lib</span>
 <span class="kn">from</span> <span class="nn">pyscf.lib</span> <span class="kn">import</span> <span class="n">logger</span>
+<span class="kn">from</span> <span class="nn">pyscf.lib.exceptions</span> <span class="kn">import</span> <span class="n">PointGroupSymmetryError</span>
 <span class="kn">from</span> <span class="nn">pyscf.symm</span> <span class="kn">import</span> <span class="n">basis</span>
 <span class="kn">from</span> <span class="nn">pyscf.symm</span> <span class="kn">import</span> <span class="n">param</span>
 <span class="kn">from</span> <span class="nn">pyscf</span> <span class="kn">import</span> <span class="n">__config__</span>
@@ -442,7 +443,7 @@
         <span class="k">return</span> <span class="n">param</span><span class="o">.</span><span class="n">CHARACTER_TABLE</span><span class="p">[</span><span class="n">gpname</span><span class="p">][</span><span class="n">irrep_id_in_d2h</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span></div>
 
 <span class="k">def</span> <span class="nf">irrep_name</span><span class="p">(</span><span class="n">pgname</span><span class="p">,</span> <span class="n">irrep_id</span><span class="p">):</span>
-    <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;This function was obsoleted. Use irrep_id2name&#39;</span><span class="p">)</span>
+    <span class="k">raise</span> <span class="n">PointGroupSymmetryError</span><span class="p">(</span><span class="s1">&#39;This function was obsoleted. Use irrep_id2name&#39;</span><span class="p">)</span>
 
 <div class="viewcode-block" id="route"><a class="viewcode-back" href="../../../modules/symm.html#pyscf.symm.addons.route">[docs]</a><span class="k">def</span> <span class="nf">route</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">nelec</span><span class="p">,</span> <span class="n">orbsym</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;Pick orbitals to form a determinant which has the right symmetry.</span>

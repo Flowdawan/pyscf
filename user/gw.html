@@ -92,7 +92,7 @@
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../overview.html">1. An overview of PySCF</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../install.html">2. Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../tutorial.html">3. Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quickstart.html">3. Quickstart</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../user.html">4. User guide</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="gto.html">4.1. Molecular structure</a></li>
 <li class="toctree-l2"><a class="reference internal" href="scf.html">4.2. Self-consistent field (SCF) methods</a></li>
@@ -114,13 +114,15 @@
 <li class="toctree-l2"><a class="reference internal" href="agf2.html">4.9. Auxiliary second-order Green’s function perturbation theory (AGF2)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="mcscf.html">4.10. Multi-configuration self-consistent field (MCSCF)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tddft.html">4.11. Time-dependent Hartree-Fock and Density Functional Theory</a></li>
-<li class="toctree-l2"><a class="reference internal" href="rt.html">4.12. Real-time time-dependent density functional theory</a></li>
-<li class="toctree-l2"><a class="reference internal" href="solvent.html">4.13. Solvation models</a></li>
-<li class="toctree-l2"><a class="reference internal" href="qmmm.html">4.14. QM/MM methods</a></li>
-<li class="toctree-l2"><a class="reference internal" href="x2c.html">4.15. Relativistic calculations</a></li>
-<li class="toctree-l2"><a class="reference internal" href="df.html">4.16. Density fitting</a></li>
-<li class="toctree-l2"><a class="reference internal" href="pbc.html">4.17. Periodic boundary conditions</a></li>
-<li class="toctree-l2"><a class="reference internal" href="eph.html">4.18. Electron Phonon Matrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="solvent.html">4.12. Solvation models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="qmmm.html">4.13. QM/MM methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="x2c.html">4.14. Relativistic calculations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="df.html">4.15. Density fitting (DF)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pbc.html">4.16. Periodic boundary conditions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eph.html">4.17. Electron Phonon Matrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lo.html">4.18. Localized Orbitals</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sgx.html">4.19. Seminumerical Exchange (SGX)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="geomopt.html">4.20. Geometry optimization</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../develop.html">5. Developer documentation</a></li>
@@ -208,6 +210,29 @@ the results depend on the mean-field starting point, which can be Hartree-Fock
 or density functional theory.  As described below, PySCF has three
 implementations of the GW approximation, all of which are “full-frequency”.</p>
 <p>An example GW calculation is shown below:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env python</span>
+
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">A simple example to run a GW calculation </span>
+<span class="sd">&#39;&#39;&#39;</span>
+
+<span class="kn">from</span> <span class="nn">pyscf</span> <span class="kn">import</span> <span class="n">gto</span><span class="p">,</span> <span class="n">dft</span><span class="p">,</span> <span class="n">gw</span>
+<span class="n">mol</span> <span class="o">=</span> <span class="n">gto</span><span class="o">.</span><span class="n">M</span><span class="p">(</span>
+    <span class="n">atom</span> <span class="o">=</span> <span class="s1">&#39;H 0 0 0; F 0 0 1.1&#39;</span><span class="p">,</span>
+    <span class="n">basis</span> <span class="o">=</span> <span class="s1">&#39;ccpvdz&#39;</span><span class="p">)</span>
+<span class="n">mf</span> <span class="o">=</span> <span class="n">dft</span><span class="o">.</span><span class="n">RKS</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+<span class="n">mf</span><span class="o">.</span><span class="n">xc</span> <span class="o">=</span> <span class="s1">&#39;pbe&#39;</span>
+<span class="n">mf</span><span class="o">.</span><span class="n">kernel</span><span class="p">()</span>
+
+<span class="n">nocc</span> <span class="o">=</span> <span class="n">mol</span><span class="o">.</span><span class="n">nelectron</span><span class="o">//</span><span class="mi">2</span>
+
+<span class="c1"># By default, GW is done with analytic continuation</span>
+<span class="n">gw</span> <span class="o">=</span> <span class="n">gw</span><span class="o">.</span><span class="n">GW</span><span class="p">(</span><span class="n">mf</span><span class="p">)</span>
+<span class="c1"># same as gw = gw.GW(mf, freq_int=&#39;ac&#39;)</span>
+<span class="n">gw</span><span class="o">.</span><span class="n">kernel</span><span class="p">(</span><span class="n">orbs</span><span class="o">=</span><span class="nb">range</span><span class="p">(</span><span class="n">nocc</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span><span class="n">nocc</span><span class="o">+</span><span class="mi">3</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">gw</span><span class="o">.</span><span class="n">mo_energy</span><span class="p">)</span>
+</pre></div>
+</div>
 <p>In this example, the <code class="docutils literal notranslate"><span class="pre">orbs</span></code> keyword argument is
 provided to select which GW orbital energies are requested.  By default,
 all orbital energies (occupied and unoccupied) will be calculated, which
@@ -271,6 +296,35 @@ approximation (dRPA) to screen the Coulomb interaction.
 Within GW-Exact, any alternative time-dependent mean-field theory (TDHF, TDDFT, etc.) can
 be also used.  The instance of an executed <code class="docutils literal notranslate"><span class="pre">tdscf</span></code> method can be provided as a
 keyword argument:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env python</span>
+
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">GW calculation with exact frequency integration</span>
+<span class="sd">and TDDFT screening instead of dRPA</span>
+<span class="sd">&#39;&#39;&#39;</span>
+
+<span class="kn">from</span> <span class="nn">pyscf</span> <span class="kn">import</span> <span class="n">gto</span><span class="p">,</span> <span class="n">dft</span><span class="p">,</span> <span class="n">gw</span>
+<span class="n">mol</span> <span class="o">=</span> <span class="n">gto</span><span class="o">.</span><span class="n">M</span><span class="p">(</span>
+    <span class="n">atom</span> <span class="o">=</span> <span class="s1">&#39;H 0 0 0; F 0 0 1.1&#39;</span><span class="p">,</span>
+    <span class="n">basis</span> <span class="o">=</span> <span class="s1">&#39;ccpvdz&#39;</span><span class="p">)</span>
+<span class="n">mf</span> <span class="o">=</span> <span class="n">dft</span><span class="o">.</span><span class="n">RKS</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+<span class="n">mf</span><span class="o">.</span><span class="n">xc</span> <span class="o">=</span> <span class="s1">&#39;pbe&#39;</span>
+<span class="n">mf</span><span class="o">.</span><span class="n">kernel</span><span class="p">()</span>
+
+<span class="kn">from</span> <span class="nn">pyscf</span> <span class="kn">import</span> <span class="n">tdscf</span>
+<span class="n">nocc</span> <span class="o">=</span> <span class="n">mol</span><span class="o">.</span><span class="n">nelectron</span><span class="o">//</span><span class="mi">2</span>
+<span class="n">nmo</span> <span class="o">=</span> <span class="n">mf</span><span class="o">.</span><span class="n">mo_energy</span><span class="o">.</span><span class="n">size</span>
+<span class="n">nvir</span> <span class="o">=</span> <span class="n">nmo</span><span class="o">-</span><span class="n">nocc</span>
+<span class="n">td</span> <span class="o">=</span> <span class="n">tdscf</span><span class="o">.</span><span class="n">TDDFT</span><span class="p">(</span><span class="n">mf</span><span class="p">)</span>
+<span class="n">td</span><span class="o">.</span><span class="n">nstates</span> <span class="o">=</span> <span class="n">nocc</span><span class="o">*</span><span class="n">nvir</span>
+<span class="n">td</span><span class="o">.</span><span class="n">verbose</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">td</span><span class="o">.</span><span class="n">kernel</span><span class="p">()</span>
+
+<span class="n">gw</span> <span class="o">=</span> <span class="n">gw</span><span class="o">.</span><span class="n">GW</span><span class="p">(</span><span class="n">mf</span><span class="p">,</span> <span class="n">freq_int</span><span class="o">=</span><span class="s1">&#39;exact&#39;</span><span class="p">,</span> <span class="n">tdmf</span><span class="o">=</span><span class="n">td</span><span class="p">)</span>
+<span class="n">gw</span><span class="o">.</span><span class="n">kernel</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">gw</span><span class="o">.</span><span class="n">mo_energy</span><span class="p">)</span>
+</pre></div>
+</div>
 </div>
 </div>
 </div>

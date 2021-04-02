@@ -89,7 +89,7 @@
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../../overview.html">1. An overview of PySCF</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../install.html">2. Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../tutorial.html">3. Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../quickstart.html">3. Quickstart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../user.html">4. User guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../develop.html">5. Developer documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../modules.html">6. API documentation</a></li>
@@ -202,6 +202,8 @@
 <span class="kn">from</span> <span class="nn">pyscf.pbc.scf</span> <span class="kn">import</span> <span class="n">chkfile</span>  <span class="c1"># noqa</span>
 <span class="kn">from</span> <span class="nn">pyscf.pbc.scf</span> <span class="kn">import</span> <span class="n">addons</span>
 <span class="kn">from</span> <span class="nn">pyscf.pbc</span> <span class="kn">import</span> <span class="n">df</span>
+<span class="kn">from</span> <span class="nn">pyscf.pbc.scf.rsjk</span> <span class="kn">import</span> <span class="n">RangeSeparationJKBuilder</span>
+<span class="kn">from</span> <span class="nn">pyscf.pbc.lib.kpts_helper</span> <span class="kn">import</span> <span class="n">gamma_point</span>
 <span class="kn">from</span> <span class="nn">pyscf</span> <span class="kn">import</span> <span class="n">__config__</span>
 
 
@@ -659,6 +661,9 @@
         <span class="n">mol_hf</span><span class="o">.</span><span class="n">SCF</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cell</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">with_df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">FFTDF</span><span class="p">(</span><span class="n">cell</span><span class="p">)</span>
+        <span class="c1"># Range separation JK builder</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rsjk</span> <span class="o">=</span> <span class="kc">None</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">exxdiv</span> <span class="o">=</span> <span class="n">exxdiv</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">kpt</span> <span class="o">=</span> <span class="n">kpt</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">conv_tol</span> <span class="o">=</span> <span class="n">cell</span><span class="o">.</span><span class="n">precision</span> <span class="o">*</span> <span class="mi">10</span>
@@ -673,12 +678,20 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">with_df</span><span class="o">.</span><span class="n">kpts</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
     <span class="nd">@kpt</span><span class="o">.</span><span class="n">setter</span>
     <span class="k">def</span> <span class="nf">kpt</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">with_df</span><span class="o">.</span><span class="n">kpts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">with_df</span><span class="o">.</span><span class="n">kpts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">rsjk</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">rsjk</span><span class="o">.</span><span class="n">kpts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">with_df</span><span class="o">.</span><span class="n">kpts</span>
 
     <span class="k">def</span> <span class="nf">build</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cell</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="k">if</span> <span class="s1">&#39;kpt&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">:</span>
             <span class="c1"># To handle the attribute kpt loaded from chkfile</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">kpt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;kpt&#39;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">rsjk</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rsjk</span><span class="o">.</span><span class="n">kpts</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">kpt</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">rsjk</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rsjk</span><span class="o">.</span><span class="vm">__class__</span><span class="p">(</span><span class="n">cell</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">kpt</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">rsjk</span><span class="o">.</span><span class="n">build</span><span class="p">(</span><span class="n">direct_scf_tol</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">direct_scf_tol</span><span class="p">)</span>
+
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="o">&gt;=</span> <span class="n">logger</span><span class="o">.</span><span class="n">WARN</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">check_sanity</span><span class="p">()</span>
         <span class="k">return</span> <span class="bp">self</span>
@@ -757,6 +770,8 @@
         <span class="n">nao</span> <span class="o">=</span> <span class="n">dm</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 
         <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">omega</span> <span class="ow">and</span> <span class="n">kpts_band</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span>
+            <span class="c1"># TODO: generate AO integrals with rsjk algorithm</span>
+            <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">rsjk</span> <span class="ow">and</span>
             <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">exxdiv</span> <span class="o">==</span> <span class="s1">&#39;ewald&#39;</span> <span class="ow">or</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">exxdiv</span><span class="p">)</span> <span class="ow">and</span>
             <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_eri</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">cell</span><span class="o">.</span><span class="n">incore_anyway</span> <span class="ow">or</span>
              <span class="p">(</span><span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">direct_scf</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_mem_enough</span><span class="p">()))):</span>
@@ -770,10 +785,12 @@
                 <span class="c1"># G=0 is not inculded in the ._eri integrals</span>
                 <span class="n">_ewald_exxdiv_for_G0</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cell</span><span class="p">,</span> <span class="n">kpt</span><span class="p">,</span> <span class="n">dm</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">nao</span><span class="p">,</span><span class="n">nao</span><span class="p">),</span>
                                      <span class="n">vk</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">nao</span><span class="p">,</span><span class="n">nao</span><span class="p">))</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">rsjk</span><span class="p">:</span>
+            <span class="n">vj</span><span class="p">,</span> <span class="n">vk</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rsjk</span><span class="o">.</span><span class="n">get_jk</span><span class="p">(</span><span class="n">dm</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">nao</span><span class="p">,</span><span class="n">nao</span><span class="p">),</span> <span class="n">hermi</span><span class="p">,</span> <span class="n">kpt</span><span class="p">,</span> <span class="n">kpts_band</span><span class="p">,</span>
+                                      <span class="n">with_j</span><span class="p">,</span> <span class="n">with_k</span><span class="p">,</span> <span class="n">omega</span><span class="p">,</span> <span class="n">exxdiv</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">exxdiv</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">vj</span><span class="p">,</span> <span class="n">vk</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">with_df</span><span class="o">.</span><span class="n">get_jk</span><span class="p">(</span><span class="n">dm</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">nao</span><span class="p">,</span><span class="n">nao</span><span class="p">),</span> <span class="n">hermi</span><span class="p">,</span>
-                                         <span class="n">kpt</span><span class="p">,</span> <span class="n">kpts_band</span><span class="p">,</span> <span class="n">with_j</span><span class="p">,</span> <span class="n">with_k</span><span class="p">,</span> <span class="n">omega</span><span class="p">,</span>
-                                         <span class="n">exxdiv</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">exxdiv</span><span class="p">)</span>
+            <span class="n">vj</span><span class="p">,</span> <span class="n">vk</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">with_df</span><span class="o">.</span><span class="n">get_jk</span><span class="p">(</span><span class="n">dm</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">nao</span><span class="p">,</span><span class="n">nao</span><span class="p">),</span> <span class="n">hermi</span><span class="p">,</span> <span class="n">kpt</span><span class="p">,</span> <span class="n">kpts_band</span><span class="p">,</span>
+                                         <span class="n">with_j</span><span class="p">,</span> <span class="n">with_k</span><span class="p">,</span> <span class="n">omega</span><span class="p">,</span> <span class="n">exxdiv</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">exxdiv</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">with_j</span><span class="p">:</span>
             <span class="n">vj</span> <span class="o">=</span> <span class="n">_format_jks</span><span class="p">(</span><span class="n">vj</span><span class="p">,</span> <span class="n">dm</span><span class="p">,</span> <span class="n">kpts_band</span><span class="p">)</span>
@@ -810,8 +827,16 @@
         <span class="k">if</span> <span class="n">cell</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> <span class="n">cell</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cell</span>
         <span class="k">if</span> <span class="n">dm</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> <span class="n">dm</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_rdm1</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">kpt</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> <span class="n">kpt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">kpt</span>
-        <span class="n">vj</span><span class="p">,</span> <span class="n">vk</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_jk</span><span class="p">(</span><span class="n">cell</span><span class="p">,</span> <span class="n">dm</span><span class="p">,</span> <span class="n">hermi</span><span class="p">,</span> <span class="n">kpt</span><span class="p">,</span> <span class="n">kpts_band</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">vj</span> <span class="o">-</span> <span class="n">vk</span> <span class="o">*</span> <span class="o">.</span><span class="mi">5</span></div>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">rsjk</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">direct_scf</span><span class="p">:</span>
+            <span class="c1"># Enable direct-SCF for real space JK builder</span>
+            <span class="n">ddm</span> <span class="o">=</span> <span class="n">dm</span> <span class="o">-</span> <span class="n">dm_last</span>
+            <span class="n">vj</span><span class="p">,</span> <span class="n">vk</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_jk</span><span class="p">(</span><span class="n">cell</span><span class="p">,</span> <span class="n">ddm</span><span class="p">,</span> <span class="n">hermi</span><span class="p">,</span> <span class="n">kpt</span><span class="p">,</span> <span class="n">kpts_band</span><span class="p">)</span>
+            <span class="n">vhf</span> <span class="o">=</span> <span class="n">vj</span> <span class="o">-</span> <span class="n">vk</span> <span class="o">*</span> <span class="o">.</span><span class="mi">5</span>
+            <span class="n">vhf</span> <span class="o">+=</span> <span class="n">vhf_last</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">vj</span><span class="p">,</span> <span class="n">vk</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_jk</span><span class="p">(</span><span class="n">cell</span><span class="p">,</span> <span class="n">dm</span><span class="p">,</span> <span class="n">hermi</span><span class="p">,</span> <span class="n">kpt</span><span class="p">,</span> <span class="n">kpts_band</span><span class="p">)</span>
+            <span class="n">vhf</span> <span class="o">=</span> <span class="n">vj</span> <span class="o">-</span> <span class="n">vk</span> <span class="o">*</span> <span class="o">.</span><span class="mi">5</span>
+        <span class="k">return</span> <span class="n">vhf</span></div>
 
 <div class="viewcode-block" id="SCF.get_jk_incore"><a class="viewcode-back" href="../../../../modules/pbc/scf.html#pyscf.pbc.scf.hf.SCF.get_jk_incore">[docs]</a>    <span class="k">def</span> <span class="nf">get_jk_incore</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cell</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dm</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">hermi</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">kpt</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">omega</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                       <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
@@ -915,7 +940,45 @@
         <span class="k">return</span> <span class="n">addons</span><span class="o">.</span><span class="n">convert_to_ghf</span><span class="p">(</span><span class="n">mf</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="SCF.nuc_grad_method"><a class="viewcode-back" href="../../../../modules/pbc/scf.html#pyscf.pbc.scf.hf.SCF.nuc_grad_method">[docs]</a>    <span class="k">def</span> <span class="nf">nuc_grad_method</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div></div>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
+
+<div class="viewcode-block" id="SCF.jk_method"><a class="viewcode-back" href="../../../../modules/pbc/scf.html#pyscf.pbc.scf.hf.SCF.jk_method">[docs]</a>    <span class="k">def</span> <span class="nf">jk_method</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">J</span><span class="o">=</span><span class="s1">&#39;FFTDF&#39;</span><span class="p">,</span> <span class="n">K</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Set up the schemes to evaluate Coulomb and exchange matrix</span>
+
+<span class="sd">        FFTDF: planewave density fitting using Fast Fourier Transform</span>
+<span class="sd">        AFTDF: planewave density fitting using analytic Fourier Transform</span>
+<span class="sd">        GDF: Gaussian density fitting</span>
+<span class="sd">        MDF: Gaussian and planewave mix density fitting</span>
+<span class="sd">        RS: range-separation JK builder</span>
+<span class="sd">        RSDF: range-separation density fitting</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="n">K</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">K</span> <span class="o">=</span> <span class="n">J</span>
+
+        <span class="k">if</span> <span class="n">J</span> <span class="o">!=</span> <span class="n">K</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s1">&#39;J != K&#39;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="s1">&#39;DF&#39;</span> <span class="ow">in</span> <span class="n">J</span> <span class="ow">or</span> <span class="s1">&#39;DF&#39;</span> <span class="ow">in</span> <span class="n">K</span><span class="p">:</span>
+            <span class="k">if</span> <span class="s1">&#39;DF&#39;</span> <span class="ow">in</span> <span class="n">J</span> <span class="ow">and</span> <span class="s1">&#39;DF&#39;</span> <span class="ow">in</span> <span class="n">K</span><span class="p">:</span>
+                <span class="k">assert</span> <span class="n">J</span> <span class="o">==</span> <span class="n">K</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">df_method</span> <span class="o">=</span> <span class="n">J</span> <span class="k">if</span> <span class="s1">&#39;DF&#39;</span> <span class="ow">in</span> <span class="n">J</span> <span class="k">else</span> <span class="n">K</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">with_df</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">df_method</span><span class="p">)(</span><span class="bp">self</span><span class="o">.</span><span class="n">cell</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">kpt</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="s1">&#39;RS&#39;</span> <span class="ow">in</span> <span class="n">J</span> <span class="ow">or</span> <span class="s1">&#39;RS&#39;</span> <span class="ow">in</span> <span class="n">K</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">gamma_point</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">kpt</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s1">&#39;Single k-point must be gamma point&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">rsjk</span> <span class="o">=</span> <span class="n">RangeSeparationJKBuilder</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cell</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">kpt</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">rsjk</span><span class="o">.</span><span class="n">verbose</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span>
+
+        <span class="c1"># For nuclear attraction</span>
+        <span class="k">if</span> <span class="n">J</span> <span class="o">==</span> <span class="s1">&#39;RS&#39;</span> <span class="ow">and</span> <span class="n">K</span> <span class="o">==</span> <span class="s1">&#39;RS&#39;</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">with_df</span><span class="p">,</span> <span class="n">df</span><span class="o">.</span><span class="n">GDF</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">with_df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">GDF</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cell</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">kpt</span><span class="p">)</span>
+
+        <span class="n">nuc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">with_df</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug1</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;Apply </span><span class="si">%s</span><span class="s1"> for J, </span><span class="si">%s</span><span class="s1"> for K, </span><span class="si">%s</span><span class="s1"> for nuc&#39;</span><span class="p">,</span> <span class="n">J</span><span class="p">,</span> <span class="n">K</span><span class="p">,</span> <span class="n">nuc</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span></div></div>
 
 
 <div class="viewcode-block" id="RHF"><a class="viewcode-back" href="../../../../modules/pbc/scf.html#pyscf.pbc.scf.hf.RHF">[docs]</a><span class="k">class</span> <span class="nc">RHF</span><span class="p">(</span><span class="n">SCF</span><span class="p">,</span> <span class="n">mol_hf</span><span class="o">.</span><span class="n">RHF</span><span class="p">):</span>

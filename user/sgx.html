@@ -1,0 +1,325 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>4.19. Seminumerical Exchange (SGX) &mdash; PySCF 1.7.6 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="4.20. Geometry optimization" href="geomopt.html" />
+    <link rel="prev" title="4.18. Localized Orbitals" href="lo.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> PySCF
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.7
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../overview.html">1. An overview of PySCF</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">2. Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quickstart.html">3. Quickstart</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../user.html">4. User guide</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="gto.html">4.1. Molecular structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scf.html">4.2. Self-consistent field (SCF) methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dft.html">4.3. Density functional theory (DFT)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mp.html">4.4. Second-Order Møller–Plesset Perturbation Theory (MP2)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gw.html">4.5. GW approximation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ci.html">4.6. Configuration interaction (CISD and FCI)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cc.html">4.7. Coupled-cluster theory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adc.html">4.8. Algebraic diagrammatic construction (ADC) scheme</a></li>
+<li class="toctree-l2"><a class="reference internal" href="agf2.html">4.9. Auxiliary second-order Green’s function perturbation theory (AGF2)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mcscf.html">4.10. Multi-configuration self-consistent field (MCSCF)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tddft.html">4.11. Time-dependent Hartree-Fock and Density Functional Theory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="solvent.html">4.12. Solvation models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="qmmm.html">4.13. QM/MM methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="x2c.html">4.14. Relativistic calculations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="df.html">4.15. Density fitting (DF)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pbc.html">4.16. Periodic boundary conditions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eph.html">4.17. Electron Phonon Matrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lo.html">4.18. Localized Orbitals</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">4.19. Seminumerical Exchange (SGX)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#introduction">4.19.1. Introduction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#usage-and-example">4.19.2. Usage and Example</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#adjustable-parameters">4.19.3. Adjustable Parameters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#references">4.19.4. References</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="geomopt.html">4.20. Geometry optimization</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../develop.html">5. Developer documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules.html">6. API documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../interface.html">7. Interfaces</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">PySCF</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../user.html"><span class="section-number">4. </span>User guide</a> &raquo;</li>
+        
+      <li><span class="section-number">4.19. </span>Seminumerical Exchange (SGX)</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../_sources/user/sgx.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="seminumerical-exchange-sgx">
+<span id="user-sgx"></span><h1><span class="section-number">4.19. </span>Seminumerical Exchange (SGX)<a class="headerlink" href="#seminumerical-exchange-sgx" title="Permalink to this headline">¶</a></h1>
+<p><em>Modules</em>: <a class="reference internal" href="../modules/sgx.html#module-sgx" title="sgx"><code class="xref py py-mod docutils literal notranslate"><span class="pre">sgx</span></code></a></p>
+<p>The SGX module implements seminumerical computation of the exchange matrix.</p>
+<div class="section" id="introduction">
+<h2><span class="section-number">4.19.1. </span>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>Direct computation of the Hartree-Fock exchange matrix in the atomic orbital basis scales poorly with system size.
+To achieve better scaling, one three-dimensional integral in the 6-dimensional two-electron integrals can be computed analytically, while the other can be evaluated on a real-space grid, as proposed by Friesner <a class="bibtex reference internal" href="#friesner1985" id="id1">[1]</a>.
+The PySCF implementation resembles the chain-of-spheres (COSX) algorithm of Neese et al. <a class="bibtex reference internal" href="#neese2009" id="id2">[2]</a>, but uses more conservative grids and does not implement P-junction screening.
+Overlap fitting is used to reduce aliasing errors <a class="bibtex reference internal" href="#izsak2011" id="id3">[3]</a>.
+SGX scales as <span class="math notranslate nohighlight">\(O(N^2)\)</span> with system size, as opposed to the <span class="math notranslate nohighlight">\(O(N^4)\)</span> scaling of analytical exchange <a class="bibtex reference internal" href="#neese2009" id="id4">[2]</a>.</p>
+</div>
+<div class="section" id="usage-and-example">
+<h2><span class="section-number">4.19.2. </span>Usage and Example<a class="headerlink" href="#usage-and-example" title="Permalink to this headline">¶</a></h2>
+<p>Any <code class="xref py py-attr docutils literal notranslate"><span class="pre">scf.hf.SCF</span></code> object <code class="xref py py-attr docutils literal notranslate"><span class="pre">mf</span></code> can be converted to an equivalent object that computes the Coulomb and exchange matrices with SGX instead of analytical integration by calling <code class="code docutils literal notranslate"><span class="pre">sgx.sgx_fit(mf)</span></code>.</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://github.com/pyscf/pyscf/tree/master/examples/sgx/00-simple_sgx.py">examples/sgx/00-simple_sgx.py</a></p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env python</span>
+
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">This example shows how to use pseudo spectral integrals in SCF calculation.</span>
+<span class="sd">&#39;&#39;&#39;</span>
+
+<span class="kn">from</span> <span class="nn">pyscf</span> <span class="kn">import</span> <span class="n">gto</span>
+<span class="kn">from</span> <span class="nn">pyscf</span> <span class="kn">import</span> <span class="n">scf</span>
+<span class="kn">from</span> <span class="nn">pyscf</span> <span class="kn">import</span> <span class="n">sgx</span>
+<span class="n">mol</span> <span class="o">=</span> <span class="n">gto</span><span class="o">.</span><span class="n">M</span><span class="p">(</span>
+    <span class="n">atom</span><span class="o">=</span><span class="s1">&#39;&#39;&#39;O    0.   0.       0.</span>
+<span class="s1">            H    0.   -0.757   0.587</span>
+<span class="s1">            H    0.   0.757    0.587</span>
+<span class="s1">    &#39;&#39;&#39;</span><span class="p">,</span>
+    <span class="n">basis</span> <span class="o">=</span> <span class="s1">&#39;ccpvdz&#39;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">mf</span> <span class="o">=</span> <span class="n">sgx</span><span class="o">.</span><span class="n">sgx_fit</span><span class="p">(</span><span class="n">scf</span><span class="o">.</span><span class="n">RHF</span><span class="p">(</span><span class="n">mol</span><span class="p">))</span>
+<span class="n">mf</span><span class="o">.</span><span class="n">kernel</span><span class="p">()</span>
+
+<span class="c1"># Using RI for Coulomb matrix while K-matrix is constructed with COS-X method</span>
+<span class="n">mf</span><span class="o">.</span><span class="n">with_df</span><span class="o">.</span><span class="n">dfj</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="n">mf</span><span class="o">.</span><span class="n">kernel</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">converged</span> <span class="n">SCF</span> <span class="n">energy</span> <span class="o">=</span> <span class="o">-</span><span class="mf">76.0267374704185</span>
+<span class="n">converged</span> <span class="n">SCF</span> <span class="n">energy</span> <span class="o">=</span> <span class="o">-</span><span class="mf">76.0267978618974</span>
+</pre></div>
+</div>
+<p>In this case, the error of SGX compared to analytical exchange is about 0.06 mEh. The line</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mf</span><span class="o">.</span><span class="n">with_df</span><span class="o">.</span><span class="n">dfj</span> <span class="o">=</span> <span class="kc">True</span>
+</pre></div>
+</div>
+<p>specifies to compute the Coulomb matrix using density fitting (DF-J) while using SGX for the exchange matrix.</p>
+</div>
+<div class="section" id="adjustable-parameters">
+<h2><span class="section-number">4.19.3. </span>Adjustable Parameters<a class="headerlink" href="#adjustable-parameters" title="Permalink to this headline">¶</a></h2>
+<p>Calling the <code class="xref py py-attr docutils literal notranslate"><span class="pre">sgx_fit</span></code> function on an <code class="xref py py-attr docutils literal notranslate"><span class="pre">scf.hf.SCF</span></code> object returns an equivalent <code class="xref py py-attr docutils literal notranslate"><span class="pre">SGXHF</span></code> object with a <code class="xref py py-attr docutils literal notranslate"><span class="pre">with_df</span></code> attribute that handles SGX integration. To use a non-default auxiliary basis (for <code class="xref py py-attr docutils literal notranslate"><span class="pre">dfj=True</span></code>), <code class="xref py py-attr docutils literal notranslate"><span class="pre">auxbasis</span></code> can be specified in the call to <code class="xref py py-attr docutils literal notranslate"><span class="pre">sgx_fit</span></code>. In addition, there are five main adjustable parameters for this object:</p>
+<ul class="simple">
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">grids_level_i</span></code>: The grid level to use for initial SCF iterations.</p></li>
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">grids_level_f</span></code>: The grid level to use for final SCF iterations.</p></li>
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">grids_thrd</span></code>: The grid points where no atomic orbital is significant (has a value greater than this threshold) are removed from consideration.</p></li>
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">grids_switch_thrd</span></code>: The threshold for the magnitude of the change in the density matrix that triggers the switch from the initial grid specified by <code class="xref py py-attr docutils literal notranslate"><span class="pre">grids_level_i</span></code> to the final grid specified by <code class="xref py py-attr docutils literal notranslate"><span class="pre">grids_level_f</span></code>.</p></li>
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">blockdim</span></code>: The maximum number of grid points to loop over at once. The number of grid points per batch is the minimum of <code class="xref py py-attr docutils literal notranslate"><span class="pre">blockmin</span></code> and the maximum number of points allowed by the memory available for the calculation. The maximum memory can be adjusted by setting the <code class="xref py py-attr docutils literal notranslate"><span class="pre">max_memory</span></code> attribute, which is initially set to <code class="xref py py-attr docutils literal notranslate"><span class="pre">mol.max_memory</span></code>, the max memory setting for the Mole object.</p></li>
+</ul>
+</div>
+<div class="section" id="references">
+<h2><span class="section-number">4.19.4. </span>References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h2>
+<p id="bibtex-bibliography-user/sgx-0"><dl class="citation">
+<dt class="bibtex label" id="friesner1985"><span class="brackets"><a class="fn-backref" href="#id1">1</a></span></dt>
+<dd><p>Richard A. Friesner. Solution of self-consistent field electronic structure equations by a pseudospectral method. <em>Chem. Phys. Lett.</em>, 116:39–43, 1985. <a class="reference external" href="https://doi.org/10.1016/0009-2614(85)80121-4">doi:10.1016/0009-2614(85)80121-4</a>.</p>
+</dd>
+<dt class="bibtex label" id="neese2009"><span class="brackets">2</span><span class="fn-backref">(<a href="#id2">1</a>,<a href="#id4">2</a>)</span></dt>
+<dd><p>Frank Neese, Frank Wennmohs, Andreas Hansen, and Ute Becker. Efficient, approximate and parallel Hartree-Fock and hybrid DFT calculations. A ‘chain-of-spheres’ algorithm for the Hartree-Fock exchange. <em>Chem. Phys.</em>, 356:98, 2009. <a class="reference external" href="https://doi.org/10.1016/j.chemphys.2008.10.036">doi:10.1016/j.chemphys.2008.10.036</a>.</p>
+</dd>
+<dt class="bibtex label" id="izsak2011"><span class="brackets"><a class="fn-backref" href="#id3">3</a></span></dt>
+<dd><p>Róbert Izsák and Frank Neese. An overlap fitted chain of spheres exchange method. <em>J. Chem. Phys.</em>, 135:144105, 2011. <a class="reference external" href="https://doi.org/10.1063/1.3646921">doi:10.1063/1.3646921</a>.</p>
+</dd>
+</dl>
+</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="geomopt.html" class="btn btn-neutral float-right" title="4.20. Geometry optimization" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="lo.html" class="btn btn-neutral float-left" title="4.18. Localized Orbitals" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2015-2021, The PySCF Developers.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,473 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>4.20. Geometry optimization &mdash; PySCF 1.7.6 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="5. Developer documentation" href="../develop.html" />
+    <link rel="prev" title="4.19. Seminumerical Exchange (SGX)" href="sgx.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> PySCF
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.7
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../overview.html">1. An overview of PySCF</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">2. Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quickstart.html">3. Quickstart</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../user.html">4. User guide</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="gto.html">4.1. Molecular structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scf.html">4.2. Self-consistent field (SCF) methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dft.html">4.3. Density functional theory (DFT)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mp.html">4.4. Second-Order Møller–Plesset Perturbation Theory (MP2)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gw.html">4.5. GW approximation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ci.html">4.6. Configuration interaction (CISD and FCI)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cc.html">4.7. Coupled-cluster theory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adc.html">4.8. Algebraic diagrammatic construction (ADC) scheme</a></li>
+<li class="toctree-l2"><a class="reference internal" href="agf2.html">4.9. Auxiliary second-order Green’s function perturbation theory (AGF2)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mcscf.html">4.10. Multi-configuration self-consistent field (MCSCF)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tddft.html">4.11. Time-dependent Hartree-Fock and Density Functional Theory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="solvent.html">4.12. Solvation models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="qmmm.html">4.13. QM/MM methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="x2c.html">4.14. Relativistic calculations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="df.html">4.15. Density fitting (DF)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pbc.html">4.16. Periodic boundary conditions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eph.html">4.17. Electron Phonon Matrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lo.html">4.18. Localized Orbitals</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sgx.html">4.19. Seminumerical Exchange (SGX)</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">4.20. Geometry optimization</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#basics">4.20.1. Basics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#constraints">4.20.2. Constraints</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#excited-states">4.20.3. Excited states</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#callback">4.20.4. Callback</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../develop.html">5. Developer documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules.html">6. API documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../interface.html">7. Interfaces</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">PySCF</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../user.html"><span class="section-number">4. </span>User guide</a> &raquo;</li>
+        
+      <li><span class="section-number">4.20. </span>Geometry optimization</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../_sources/user/geomopt.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="geometry-optimization">
+<span id="user-geomopt"></span><h1><span class="section-number">4.20. </span>Geometry optimization<a class="headerlink" href="#geometry-optimization" title="Permalink to this headline">¶</a></h1>
+<p><em>Modules</em>: <a class="reference internal" href="../interface/geomopt.html#module-geomopt" title="geomopt: geometry optimization"><code class="xref py py-mod docutils literal notranslate"><span class="pre">geomopt</span></code></a></p>
+<div class="section" id="basics">
+<h2><span class="section-number">4.20.1. </span>Basics<a class="headerlink" href="#basics" title="Permalink to this headline">¶</a></h2>
+<p>PySCF implements the geometry optimization via
+interfaces to <a class="reference external" href="https://github.com/leeping/geomeTRIC">geomeTRIC</a>
+and <a class="reference external" href="https://github.com/jhrmnn/pyberny">PyBerny</a> (see <a class="reference internal" href="../install.html#installing"><span class="std std-numref">Section 2</span></a>
+for instructions of installation).</p>
+<p>There are two ways to invoke geometry optimizations.
+The first is to import the <code class="xref py py-func docutils literal notranslate"><span class="pre">optimize()</span></code> function
+from the respective modules, i.e., <a class="reference internal" href="../interface/geomopt.html#module-pyscf.geomopt.geometric_solver" title="pyscf.geomopt.geometric_solver"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pyscf.geomopt.geometric_solver</span></code></a>
+and <a class="reference internal" href="../interface/geomopt.html#module-pyscf.geomopt.berny_solver" title="pyscf.geomopt.berny_solver"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pyscf.geomopt.berny_solver</span></code></a>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pyscf</span> <span class="kn">import</span> <span class="n">gto</span><span class="p">,</span> <span class="n">scf</span>
+<span class="n">mol</span> <span class="o">=</span> <span class="n">gto</span><span class="o">.</span><span class="n">M</span><span class="p">(</span><span class="n">atom</span><span class="o">=</span><span class="s1">&#39;N 0 0 0; N 0 0 1.2&#39;</span><span class="p">,</span> <span class="n">basis</span><span class="o">=</span><span class="s1">&#39;ccpvdz&#39;</span><span class="p">)</span>
+<span class="n">mf</span> <span class="o">=</span> <span class="n">scf</span><span class="o">.</span><span class="n">RHF</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+
+<span class="c1"># geometric</span>
+<span class="kn">from</span> <span class="nn">pyscf.geomopt.geometric_solver</span> <span class="kn">import</span> <span class="n">optimize</span>
+<span class="n">mol_eq</span> <span class="o">=</span> <span class="n">optimize</span><span class="p">(</span><span class="n">mf</span><span class="p">,</span> <span class="n">maxsteps</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">mol_eq</span><span class="o">.</span><span class="n">atom_coords</span><span class="p">())</span>
+
+<span class="c1"># pyberny</span>
+<span class="kn">from</span> <span class="nn">pyscf.geomopt.berny_solver</span> <span class="kn">import</span> <span class="n">optimize</span>
+<span class="n">mol_eq</span> <span class="o">=</span> <span class="n">optimize</span><span class="p">(</span><span class="n">mf</span><span class="p">,</span> <span class="n">maxsteps</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">mol_eq</span><span class="o">.</span><span class="n">atom_coords</span><span class="p">())</span>
+</pre></div>
+</div>
+<p>The second way is to create the <code class="xref py py-func docutils literal notranslate"><span class="pre">optimizer()</span></code> from the <code class="xref py py-class docutils literal notranslate"><span class="pre">Gradients</span></code> class:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># geometric</span>
+<span class="n">mol_eq</span> <span class="o">=</span> <span class="n">mf</span><span class="o">.</span><span class="n">Gradients</span><span class="p">()</span><span class="o">.</span><span class="n">optimizer</span><span class="p">(</span><span class="n">solver</span><span class="o">=</span><span class="s1">&#39;geomeTRIC&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">kernel</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">mol_eq</span><span class="o">.</span><span class="n">atom_coords</span><span class="p">())</span>
+
+<span class="c1"># pyberny</span>
+<span class="n">mol_eq</span> <span class="o">=</span> <span class="n">mf</span><span class="o">.</span><span class="n">Gradients</span><span class="p">()</span><span class="o">.</span><span class="n">optimizer</span><span class="p">(</span><span class="n">solver</span><span class="o">=</span><span class="s1">&#39;berny&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">kernel</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">mol_eq</span><span class="o">.</span><span class="n">atom_coords</span><span class="p">())</span>
+</pre></div>
+</div>
+<p>For the <code class="docutils literal notranslate"><span class="pre">geomeTRIC</span></code> backend, the convergence criteria are
+controlled by the following parameters:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conv_params</span> <span class="o">=</span> <span class="p">{</span> <span class="c1"># These are the default settings</span>
+    <span class="s1">&#39;convergence_energy&#39;</span><span class="p">:</span> <span class="mf">1e-6</span><span class="p">,</span>  <span class="c1"># Eh</span>
+    <span class="s1">&#39;convergence_grms&#39;</span><span class="p">:</span> <span class="mf">3e-4</span><span class="p">,</span>    <span class="c1"># Eh/Bohr</span>
+    <span class="s1">&#39;convergence_gmax&#39;</span><span class="p">:</span> <span class="mf">4.5e-4</span><span class="p">,</span>  <span class="c1"># Eh/Bohr</span>
+    <span class="s1">&#39;convergence_drms&#39;</span><span class="p">:</span> <span class="mf">1.2e-3</span><span class="p">,</span>  <span class="c1"># Angstrom</span>
+    <span class="s1">&#39;convergence_dmax&#39;</span><span class="p">:</span> <span class="mf">1.8e-3</span><span class="p">,</span>  <span class="c1"># Angstrom</span>
+<span class="p">}</span>
+<span class="n">mol_eq</span> <span class="o">=</span> <span class="n">optimize</span><span class="p">(</span><span class="n">mf</span><span class="p">,</span> <span class="o">**</span><span class="n">conv_params</span><span class="p">)</span>
+<span class="n">mol_eq</span> <span class="o">=</span> <span class="n">mf</span><span class="o">.</span><span class="n">Gradients</span><span class="p">()</span><span class="o">.</span><span class="n">optimizer</span><span class="p">(</span><span class="n">solver</span><span class="o">=</span><span class="s1">&#39;geomeTRIC&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">kernel</span><span class="p">(</span><span class="n">conv_params</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>For the <code class="docutils literal notranslate"><span class="pre">PyBerny</span></code> backend, the convergence criteria are
+controlled by the following parameters:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conv_params</span> <span class="o">=</span> <span class="p">{</span>  <span class="c1"># These are the default settings</span>
+    <span class="s1">&#39;gradientmax&#39;</span><span class="p">:</span> <span class="mf">0.45e-3</span><span class="p">,</span>  <span class="c1"># Eh/[Bohr|rad]</span>
+    <span class="s1">&#39;gradientrms&#39;</span><span class="p">:</span> <span class="mf">0.15e-3</span><span class="p">,</span>  <span class="c1"># Eh/[Bohr|rad]</span>
+    <span class="s1">&#39;stepmax&#39;</span><span class="p">:</span> <span class="mf">1.8e-3</span><span class="p">,</span>       <span class="c1"># [Bohr|rad]</span>
+    <span class="s1">&#39;steprms&#39;</span><span class="p">:</span> <span class="mf">1.2e-3</span><span class="p">,</span>       <span class="c1"># [Bohr|rad]</span>
+<span class="p">}</span>
+<span class="n">mol_eq</span> <span class="o">=</span> <span class="n">optimize</span><span class="p">(</span><span class="n">mf</span><span class="p">,</span> <span class="o">**</span><span class="n">conv_params</span><span class="p">)</span>
+<span class="n">mol_eq</span> <span class="o">=</span> <span class="n">mf</span><span class="o">.</span><span class="n">Gradients</span><span class="p">()</span><span class="o">.</span><span class="n">optimizer</span><span class="p">(</span><span class="n">solver</span><span class="o">=</span><span class="s1">&#39;berny&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">kernel</span><span class="p">(</span><span class="n">conv_params</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="constraints">
+<h2><span class="section-number">4.20.2. </span>Constraints<a class="headerlink" href="#constraints" title="Permalink to this headline">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">geomeTRIC</span></code> supports user defined constraints. The constraints can
+be specified in a text file with the format demonstrated in
+<a class="reference external" href="https://github.com/leeping/geomeTRIC/blob/master/examples/constraints.txt">here</a>.
+And one needs to pass the name of this file to PySCF:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">params</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;constraints&quot;</span><span class="p">:</span> <span class="s2">&quot;constraints.txt&quot;</span><span class="p">,}</span>
+<span class="n">mol_eq</span> <span class="o">=</span> <span class="n">optimize</span><span class="p">(</span><span class="n">mf</span><span class="p">,</span> <span class="o">**</span><span class="n">params</span><span class="p">)</span>
+<span class="n">mol_eq</span> <span class="o">=</span> <span class="n">mf</span><span class="o">.</span><span class="n">Gradients</span><span class="p">()</span><span class="o">.</span><span class="n">optimizer</span><span class="p">(</span><span class="n">solver</span><span class="o">=</span><span class="s1">&#39;geomeTRIC&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">kernel</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The geometry optimization can also be carried out based on
+custom energy and gradient functions:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env python</span>
+
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">For the customized energy and gradients function (e.g. adding DFT-D3</span>
+<span class="sd">correction), a fake pyscf method need to be created before passing to</span>
+<span class="sd">berny_solver.</span>
+<span class="sd">&#39;&#39;&#39;</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">pyscf</span> <span class="kn">import</span> <span class="n">gto</span><span class="p">,</span> <span class="n">scf</span>
+<span class="kn">from</span> <span class="nn">pyscf.geomopt</span> <span class="kn">import</span> <span class="n">berny_solver</span><span class="p">,</span> <span class="n">geometric_solver</span><span class="p">,</span> <span class="n">as_pyscf_method</span>
+
+<span class="n">mol</span> <span class="o">=</span> <span class="n">gto</span><span class="o">.</span><span class="n">M</span><span class="p">(</span><span class="n">atom</span><span class="o">=</span><span class="s1">&#39;N 0 0 0; N 0 0 1.8&#39;</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="s1">&#39;Bohr&#39;</span><span class="p">,</span> <span class="n">basis</span><span class="o">=</span><span class="s1">&#39;ccpvdz&#39;</span><span class="p">)</span>
+<span class="n">mf</span> <span class="o">=</span> <span class="n">scf</span><span class="o">.</span><span class="n">RHF</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+
+<span class="n">grad_scan</span> <span class="o">=</span> <span class="n">scf</span><span class="o">.</span><span class="n">RHF</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span><span class="o">.</span><span class="n">nuc_grad_method</span><span class="p">()</span><span class="o">.</span><span class="n">as_scanner</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="n">e</span><span class="p">,</span> <span class="n">g</span> <span class="o">=</span> <span class="n">grad_scan</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+    <span class="n">r</span> <span class="o">=</span> <span class="n">mol</span><span class="o">.</span><span class="n">atom_coords</span><span class="p">()</span>
+    <span class="n">penalty</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">r</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">r</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span> <span class="o">*</span> <span class="mf">0.1</span>
+    <span class="n">e</span> <span class="o">+=</span> <span class="n">penalty</span>
+    <span class="n">g</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+=</span> <span class="p">(</span><span class="n">r</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">r</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">*</span> <span class="mf">0.1</span>
+    <span class="n">g</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-=</span> <span class="p">(</span><span class="n">r</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">r</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">*</span> <span class="mf">0.1</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Customized |g|&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">g</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">e</span><span class="p">,</span> <span class="n">g</span>
+
+<span class="c1">#</span>
+<span class="c1"># Function as_pyscf_method is a wrapper that convert the &quot;energy-gradients&quot;</span>
+<span class="c1"># function to berny_solver.  The &quot;energy-gradients&quot; function takes the Mole</span>
+<span class="c1"># object as geometry input, and returns the energy and gradients of that</span>
+<span class="c1"># geometry.</span>
+<span class="c1">#</span>
+<span class="n">fake_method</span> <span class="o">=</span> <span class="n">as_pyscf_method</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
+<span class="n">new_mol</span> <span class="o">=</span> <span class="n">berny_solver</span><span class="o">.</span><span class="n">optimize</span><span class="p">(</span><span class="n">fake_method</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Old geometry (Bohr)&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">mol</span><span class="o">.</span><span class="n">atom_coords</span><span class="p">())</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;New geometry (Bohr)&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">new_mol</span><span class="o">.</span><span class="n">atom_coords</span><span class="p">())</span>
+
+<span class="c1">#</span>
+<span class="c1"># Geometry can be also optimized with geomeTRIC library</span>
+<span class="c1">#</span>
+<span class="n">new_mol</span> <span class="o">=</span> <span class="n">geometric_solver</span><span class="o">.</span><span class="n">optimize</span><span class="p">(</span><span class="n">fake_method</span><span class="p">)</span>
+
+</pre></div>
+</div>
+</div>
+<div class="section" id="excited-states">
+<h2><span class="section-number">4.20.3. </span>Excited states<a class="headerlink" href="#excited-states" title="Permalink to this headline">¶</a></h2>
+<p>For excited-state geometry optimizations, the state to be optimized
+needs to be specified in the respective <code class="xref py py-class docutils literal notranslate"><span class="pre">Gradients</span></code> objects:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env python</span>
+
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">Optimize the geometry of the excited states</span>
+
+<span class="sd">Note when optiming the excited states, states may flip and this may cause</span>
+<span class="sd">convergence issue in geometry optimizer.</span>
+<span class="sd">&#39;&#39;&#39;</span>
+
+<span class="kn">from</span> <span class="nn">pyscf</span> <span class="kn">import</span> <span class="n">gto</span>
+<span class="kn">from</span> <span class="nn">pyscf</span> <span class="kn">import</span> <span class="n">scf</span>
+<span class="kn">from</span> <span class="nn">pyscf</span> <span class="kn">import</span> <span class="n">ci</span><span class="p">,</span> <span class="n">tdscf</span><span class="p">,</span> <span class="n">mcscf</span>
+<span class="kn">from</span> <span class="nn">pyscf</span> <span class="kn">import</span> <span class="n">geomopt</span>
+
+
+<span class="n">mol</span> <span class="o">=</span> <span class="n">gto</span><span class="o">.</span><span class="n">Mole</span><span class="p">()</span>
+<span class="n">mol</span><span class="o">.</span><span class="n">atom</span><span class="o">=</span><span class="s2">&quot;N; N 1, 1.1&quot;</span>
+<span class="n">mol</span><span class="o">.</span><span class="n">basis</span><span class="o">=</span> <span class="s2">&quot;6-31g&quot;</span>
+<span class="n">mol</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
+<span class="n">mol1</span> <span class="o">=</span> <span class="n">mol</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+<span class="n">mf</span> <span class="o">=</span> <span class="n">scf</span><span class="o">.</span><span class="n">RHF</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+
+<span class="n">mc</span> <span class="o">=</span> <span class="n">mcscf</span><span class="o">.</span><span class="n">CASCI</span><span class="p">(</span><span class="n">mf</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">)</span>
+<span class="n">mc</span><span class="o">.</span><span class="n">fcisolver</span><span class="o">.</span><span class="n">nstates</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="n">excited_grad</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">nuc_grad_method</span><span class="p">()</span><span class="o">.</span><span class="n">as_scanner</span><span class="p">(</span><span class="n">state</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">mol1</span> <span class="o">=</span> <span class="n">excited_grad</span><span class="o">.</span><span class="n">optimizer</span><span class="p">()</span><span class="o">.</span><span class="n">kernel</span><span class="p">()</span>
+<span class="c1"># or</span>
+<span class="c1">#mol1 = geomopt.optimize(excited_grad)</span>
+
+
+<span class="n">td</span> <span class="o">=</span> <span class="n">tdscf</span><span class="o">.</span><span class="n">TDHF</span><span class="p">(</span><span class="n">mf</span><span class="p">)</span>
+<span class="n">td</span><span class="o">.</span><span class="n">nstates</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="n">excited_grad</span> <span class="o">=</span> <span class="n">td</span><span class="o">.</span><span class="n">nuc_grad_method</span><span class="p">()</span><span class="o">.</span><span class="n">as_scanner</span><span class="p">(</span><span class="n">state</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+<span class="n">mol1</span> <span class="o">=</span> <span class="n">excited_grad</span><span class="o">.</span><span class="n">optimizer</span><span class="p">()</span><span class="o">.</span><span class="n">kernel</span><span class="p">()</span>
+<span class="c1"># or</span>
+<span class="c1">#mol1 = geomopt.optimize(excited_grad)</span>
+
+
+<span class="n">myci</span> <span class="o">=</span> <span class="n">ci</span><span class="o">.</span><span class="n">CISD</span><span class="p">(</span><span class="n">mf</span><span class="p">)</span>
+<span class="n">myci</span><span class="o">.</span><span class="n">nstates</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="n">excited_grad</span> <span class="o">=</span> <span class="n">myci</span><span class="o">.</span><span class="n">nuc_grad_method</span><span class="p">()</span><span class="o">.</span><span class="n">as_scanner</span><span class="p">(</span><span class="n">state</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">mol1</span> <span class="o">=</span> <span class="n">excited_grad</span><span class="o">.</span><span class="n">optimizer</span><span class="p">()</span><span class="o">.</span><span class="n">kernel</span><span class="p">()</span>
+<span class="c1"># or</span>
+<span class="c1">#geomopt.optimize(excited_grad)</span>
+
+</pre></div>
+</div>
+<p>For examples of state-specific and state-averaged CASSCF calculations,
+see <a class="reference external" href="https://github.com/pyscf/pyscf/tree/master/examples/geomopt/12-mcscf_excited_states.py">examples/geomopt/12-mcscf_excited_states.py</a>.</p>
+</div>
+<div class="section" id="callback">
+<h2><span class="section-number">4.20.4. </span>Callback<a class="headerlink" href="#callback" title="Permalink to this headline">¶</a></h2>
+<p>Callback functions can be invoked at each optimization step.
+The following example shows how to add charge analysis for each
+geometry during the optimization.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env python</span>
+
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">Optimize molecular geometry within the environment of QM/MM charges.</span>
+<span class="sd">&#39;&#39;&#39;</span>
+
+<span class="kn">from</span> <span class="nn">pyscf</span> <span class="kn">import</span> <span class="n">gto</span><span class="p">,</span> <span class="n">scf</span>
+<span class="kn">from</span> <span class="nn">pyscf.geomopt</span> <span class="kn">import</span> <span class="n">berny_solver</span>
+<span class="kn">from</span> <span class="nn">pyscf.geomopt</span> <span class="kn">import</span> <span class="n">geometric_solver</span>
+
+<span class="n">mol</span> <span class="o">=</span> <span class="n">gto</span><span class="o">.</span><span class="n">M</span><span class="p">(</span><span class="n">atom</span><span class="o">=</span><span class="s1">&#39;&#39;&#39;</span>
+<span class="s1">C        0.000000    0.000000             -0.542500</span>
+<span class="s1">O        0.000000    0.000000              0.677500</span>
+<span class="s1">H        0.000000    0.9353074360871938   -1.082500</span>
+<span class="s1">H        0.000000   -0.9353074360871938   -1.082500</span>
+<span class="s1">            &#39;&#39;&#39;</span><span class="p">,</span>
+            <span class="n">basis</span><span class="o">=</span><span class="s1">&#39;3-21g&#39;</span><span class="p">)</span>
+
+<span class="n">mf</span> <span class="o">=</span> <span class="n">scf</span><span class="o">.</span><span class="n">RHF</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+
+<span class="c1"># Run analyze function in callback</span>
+<span class="k">def</span> <span class="nf">cb</span><span class="p">(</span><span class="n">envs</span><span class="p">):</span>
+    <span class="n">mf</span> <span class="o">=</span> <span class="n">envs</span><span class="p">[</span><span class="s1">&#39;g_scanner&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">base</span>
+    <span class="n">mf</span><span class="o">.</span><span class="n">analyze</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+
+<span class="c1">#</span>
+<span class="c1"># Method 1: Pass callback to optimize function</span>
+<span class="c1">#</span>
+<span class="n">geometric_solver</span><span class="o">.</span><span class="n">optimize</span><span class="p">(</span><span class="n">mf</span><span class="p">,</span> <span class="n">callback</span><span class="o">=</span><span class="n">cb</span><span class="p">)</span>
+
+<span class="n">berny_solver</span><span class="o">.</span><span class="n">optimize</span><span class="p">(</span><span class="n">mf</span><span class="p">,</span> <span class="n">callback</span><span class="o">=</span><span class="n">cb</span><span class="p">)</span>
+
+<span class="c1">#</span>
+<span class="c1"># Method 2: Add callback to geometry optimizer</span>
+<span class="c1">#</span>
+<span class="n">opt</span> <span class="o">=</span> <span class="n">mf</span><span class="o">.</span><span class="n">nuc_grad_method</span><span class="p">()</span><span class="o">.</span><span class="n">as_scanner</span><span class="p">()</span><span class="o">.</span><span class="n">optimizer</span><span class="p">()</span>
+<span class="n">opt</span><span class="o">.</span><span class="n">callback</span> <span class="o">=</span> <span class="n">cb</span>
+<span class="n">opt</span><span class="o">.</span><span class="n">kernel</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="../develop.html" class="btn btn-neutral float-right" title="5. Developer documentation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="sgx.html" class="btn btn-neutral float-left" title="4.19. Seminumerical Exchange (SGX)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2015-2021, The PySCF Developers.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

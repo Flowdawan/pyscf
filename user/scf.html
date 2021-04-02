@@ -92,7 +92,7 @@
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../overview.html">1. An overview of PySCF</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../install.html">2. Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../tutorial.html">3. Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quickstart.html">3. Quickstart</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../user.html">4. User guide</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="gto.html">4.1. Molecular structure</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">4.2. Self-consistent field (SCF) methods</a><ul>
@@ -119,13 +119,15 @@
 <li class="toctree-l2"><a class="reference internal" href="agf2.html">4.9. Auxiliary second-order Green’s function perturbation theory (AGF2)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="mcscf.html">4.10. Multi-configuration self-consistent field (MCSCF)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tddft.html">4.11. Time-dependent Hartree-Fock and Density Functional Theory</a></li>
-<li class="toctree-l2"><a class="reference internal" href="rt.html">4.12. Real-time time-dependent density functional theory</a></li>
-<li class="toctree-l2"><a class="reference internal" href="solvent.html">4.13. Solvation models</a></li>
-<li class="toctree-l2"><a class="reference internal" href="qmmm.html">4.14. QM/MM methods</a></li>
-<li class="toctree-l2"><a class="reference internal" href="x2c.html">4.15. Relativistic calculations</a></li>
-<li class="toctree-l2"><a class="reference internal" href="df.html">4.16. Density fitting</a></li>
-<li class="toctree-l2"><a class="reference internal" href="pbc.html">4.17. Periodic boundary conditions</a></li>
-<li class="toctree-l2"><a class="reference internal" href="eph.html">4.18. Electron Phonon Matrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="solvent.html">4.12. Solvation models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="qmmm.html">4.13. QM/MM methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="x2c.html">4.14. Relativistic calculations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="df.html">4.15. Density fitting (DF)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pbc.html">4.16. Periodic boundary conditions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eph.html">4.17. Electron Phonon Matrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lo.html">4.18. Localized Orbitals</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sgx.html">4.19. Seminumerical Exchange (SGX)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="geomopt.html">4.20. Geometry optimization</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../develop.html">5. Developer documentation</a></li>
@@ -606,7 +608,7 @@ shown to work reliably even in the presence of such truly pathological
 linear dependencies.</p>
 </div>
 <div class="section" id="scalar-relativistic-correction">
-<h2><span class="section-number">4.2.8. </span>Scalar relativistic correction<a class="headerlink" href="#scalar-relativistic-correction" title="Permalink to this headline">¶</a></h2>
+<span id="user-x2c"></span><h2><span class="section-number">4.2.8. </span>Scalar relativistic correction<a class="headerlink" href="#scalar-relativistic-correction" title="Permalink to this headline">¶</a></h2>
 <p>Scalar relativistic effects can be applied on the one-body operators
 through spin-free eXact-2-component (SFX2C) Hamiltonian
 <a class="bibtex reference internal" href="#dyall2001interfacing" id="id22">[15]</a>.  The SFX2C Hamiltonian can be invoked by

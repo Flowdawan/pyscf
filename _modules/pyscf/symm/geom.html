@@ -89,7 +89,7 @@
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../overview.html">1. An overview of PySCF</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../install.html">2. Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../tutorial.html">3. Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../quickstart.html">3. Quickstart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../user.html">4. User guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../develop.html">5. Developer documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../modules.html">6. API documentation</a></li>
@@ -205,6 +205,7 @@
 <span class="kn">from</span> <span class="nn">pyscf.gto</span> <span class="kn">import</span> <span class="n">mole</span>
 <span class="kn">from</span> <span class="nn">pyscf.lib</span> <span class="kn">import</span> <span class="n">norm</span>
 <span class="kn">from</span> <span class="nn">pyscf.lib</span> <span class="kn">import</span> <span class="n">logger</span>
+<span class="kn">from</span> <span class="nn">pyscf.lib.exceptions</span> <span class="kn">import</span> <span class="n">PointGroupSymmetryError</span>
 <span class="kn">from</span> <span class="nn">pyscf.symm.param</span> <span class="kn">import</span> <span class="n">OPERATOR_TABLE</span>
 <span class="kn">from</span> <span class="nn">pyscf</span> <span class="kn">import</span> <span class="n">__config__</span>
 
@@ -533,15 +534,15 @@
             <span class="n">axes</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">z</span><span class="p">))</span>
 
         <span class="k">elif</span> <span class="n">subgroup</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">SUBGROUP</span><span class="p">[</span><span class="n">groupname</span><span class="p">]:</span>
-            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1"> not in Ablien subgroup of </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span>
-                               <span class="p">(</span><span class="n">subgroup</span><span class="p">,</span> <span class="n">topgroup</span><span class="p">))</span>
+            <span class="k">raise</span> <span class="n">PointGroupSymmetryError</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1"> not in Ablien subgroup of </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span>
+                                          <span class="p">(</span><span class="n">subgroup</span><span class="p">,</span> <span class="n">topgroup</span><span class="p">))</span>
 
         <span class="n">groupname</span> <span class="o">=</span> <span class="n">subgroup</span>
     <span class="k">return</span> <span class="n">groupname</span><span class="p">,</span> <span class="n">axes</span>
 
 <span class="k">def</span> <span class="nf">symm_ops</span><span class="p">(</span><span class="n">gpname</span><span class="p">,</span> <span class="n">axes</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="k">if</span> <span class="n">axes</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;TODO: non-standard orientation&#39;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="n">PointGroupSymmetryError</span><span class="p">(</span><span class="s1">&#39;TODO: non-standard orientation&#39;</span><span class="p">)</span>
     <span class="n">op1</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
     <span class="n">opi</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
 
@@ -602,7 +603,7 @@
         <span class="n">newc</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">coords</span><span class="p">,</span> <span class="n">op</span><span class="p">)</span>
         <span class="n">idx</span> <span class="o">=</span> <span class="n">argsort_coords</span><span class="p">(</span><span class="n">newc</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">numpy</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">coords0</span><span class="p">,</span> <span class="n">newc</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span> <span class="n">atol</span><span class="o">=</span><span class="n">TOLERANCE</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;Symmetry identical atoms not found&#39;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="n">PointGroupSymmetryError</span><span class="p">(</span><span class="s1">&#39;Symmetry identical atoms not found&#39;</span><span class="p">)</span>
         <span class="n">dup_atom_ids</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span>
 
     <span class="n">dup_atom_ids</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">dup_atom_ids</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
@@ -648,7 +649,7 @@
     <span class="n">c</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">c</span> <span class="o">-</span> <span class="n">orig</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">axis</span><span class="p">)</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
     <span class="k">return</span> <span class="p">[[</span><span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">c</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">atoms</span><span class="p">))]</span>
 
-<div class="viewcode-block" id="RotationAxisNotFound"><a class="viewcode-back" href="../../../modules/symm.html#pyscf.symm.geom.RotationAxisNotFound">[docs]</a><span class="k">class</span> <span class="nc">RotationAxisNotFound</span><span class="p">(</span><span class="ne">RuntimeError</span><span class="p">):</span>
+<div class="viewcode-block" id="RotationAxisNotFound"><a class="viewcode-back" href="../../../modules/symm.html#pyscf.symm.geom.RotationAxisNotFound">[docs]</a><span class="k">class</span> <span class="nc">RotationAxisNotFound</span><span class="p">(</span><span class="n">PointGroupSymmetryError</span><span class="p">):</span>
     <span class="k">pass</span></div>
 
 <span class="k">class</span> <span class="nc">SymmSys</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
